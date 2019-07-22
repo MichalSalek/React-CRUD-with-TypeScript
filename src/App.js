@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 
 import Header from './components/common/header-bar/header-bar';
 import AppBodyHeadingBar from './components/app-body-heading-bar/app-body-heading-bar';
+import BooksList from './components/books-list/books-list';
 
 const useStyles = makeStyles({
   appBodyHeadingBar: {
@@ -28,6 +29,7 @@ function App() {
       <Header />
       <Paper className={classes.appPaper}>
         <AppBodyHeadingBar styles={classes.appBodyHeadingBar} />
+        <BooksList />
       </Paper>
     </main>
   );
