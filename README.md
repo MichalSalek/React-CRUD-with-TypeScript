@@ -22,3 +22,9 @@ demo dostępne pod adresem `https://books.h88.dev`
 2. Czytelność, prostota kodu, poprawne zaprojektowanie modułów.
 
 **Powodzenia :)**
+
+# Nie dzięki!
+
+######notes:
+###### 1. Apka nie ma RWD
+###### 2. Można dodać książę o pustych polach
