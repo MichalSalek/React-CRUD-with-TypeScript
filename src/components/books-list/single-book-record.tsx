@@ -1,5 +1,6 @@
 import React from 'react';
-
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
 
 interface IProps {
 
@@ -8,9 +9,15 @@ interface IProps {
 const SingleBookRecord = (props: IProps) => {
 
   return (
-    <section >
-      single book record
-    </section>
+    <TableRow>
+      <TableCell component="th" scope="row">
+        komórka 1
+      </TableCell>
+      <TableCell> komórka 2</TableCell>
+      <TableCell> komórka 3</TableCell>
+      <TableCell> komórka 4</TableCell>
+      <TableCell> komórka 5</TableCell>
+    </TableRow>
   );
 };
 

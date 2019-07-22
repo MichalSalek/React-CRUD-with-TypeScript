@@ -10,8 +10,8 @@ export class HTTPService {
     Accept: 'application/vnd.api+json',
   };
 
-  get(path: string, params?: any) {
-    return axios(env.apiUrl + path, {
+  get(path: string, query: string, params?: any) {
+    return axios(`${env.apiUrl}${path}?${query}`, {
       headers: {
         ...this.headers,
       },
