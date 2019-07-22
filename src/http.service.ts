@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { env } from '../environment';
+import { env } from './environment';
 
 interface IHeaders {
   Accept: string;

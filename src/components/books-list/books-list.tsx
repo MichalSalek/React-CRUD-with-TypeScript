@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SingleBookRecord from './single-book-record';
-import http from '../../services/HTTP.service';
+import http from '../../HTTP.service';
 
 interface IProps {}
 
