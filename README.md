@@ -1,4 +1,13 @@
-# Zadanie rekrutacyjne
+>**Powodzenia :)**
+
+### Nie dzięki!
+
+# In progres...
+
+##### To do:
+Arrange data for fill the table.
+
+#Zadanie rekrutacyjne
 
 **Temat zadania: aplikacja do zarządzania książkami**
 
@@ -20,11 +29,3 @@ demo dostępne pod adresem `https://books.h88.dev`
 ## Na co zwrócić uwagę
 1. Jest to projekt rekrutacyjny, nie aplikacja produkcyjna - nie musi być idealna :)
 2. Czytelność, prostota kodu, poprawne zaprojektowanie modułów.
-
-**Powodzenia :)**
-
-# Nie dzięki!
-
-######notes:
-###### 1. Apka nie ma RWD
-###### 2. Można dodać książę o pustych polach

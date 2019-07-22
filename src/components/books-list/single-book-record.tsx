@@ -2,21 +2,17 @@ import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-interface IProps {
-
-}
+interface IProps {}
 
 const SingleBookRecord = (props: IProps) => {
-
   return (
     <TableRow>
       <TableCell component="th" scope="row">
-        komórka 1
+        isbn 1
       </TableCell>
-      <TableCell> komórka 2</TableCell>
-      <TableCell> komórka 3</TableCell>
-      <TableCell> komórka 4</TableCell>
-      <TableCell> komórka 5</TableCell>
+      <TableCell> title 1</TableCell>
+      <TableCell> author 1</TableCell>
+      <TableCell> ikonki</TableCell>
     </TableRow>
   );
 };

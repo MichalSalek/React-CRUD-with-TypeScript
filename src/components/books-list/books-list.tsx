@@ -10,6 +10,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 
 import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
+import { BookApiCollection } from '../../domainModel';
 
 const useStyles = makeStyles({
   tableHead: {
@@ -25,11 +26,10 @@ const BooksList = () => {
   const [listOfBooks, setListOfBooks] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
+  const [arrangedData, setArrangedData] = useState([]);
 
   const callForBooks = (path: string, page: number) => {
     http.get(path, `page=${page + 1}`).then(result => {
-      console.warn('working! development process...');
-      console.dir(result.data);
       setListOfBooks(result.data.data);
       setTotalItems(result.data.meta.totalItems);
     });
@@ -39,7 +39,6 @@ const BooksList = () => {
     callForBooks('/books', pageNumber);
   }, [pageNumber]);
 
-
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
     newPage: number,
@@ -47,16 +46,27 @@ const BooksList = () => {
     setPageNumber(newPage);
   };
 
+  const createRow = (isbn: number, title: string, author: string) => {
+    return { author, isbn, title };
+  };
+
+  useEffect(() => {
+    arrangeData(listOfBooks);
+  }, [listOfBooks]);
+
+  const arrangeData = (data: BookApiCollection[]) => {
+    console.dir(data);
+  };
+
   return (
     <section>
       <Table>
         <TableHead className={classes.tableHead}>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell>Calories</TableCell>
-            <TableCell>Fat&nbsp;(g)</TableCell>
-            <TableCell>Carbs&nbsp;(g)</TableCell>
-            <TableCell>Protein&nbsp;(g)</TableCell>
+            <TableCell>ISBN:</TableCell>
+            <TableCell>Title:</TableCell>
+            <TableCell>Author:</TableCell>
+            <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -70,10 +80,6 @@ const BooksList = () => {
               count={totalItems}
               rowsPerPage={30}
               page={pageNumber}
-              SelectProps={{
-                inputProps: { 'aria-label': 'Rows per page' },
-                native: true,
-              }}
               onChangePage={handleChangePage}
             />
           </TableRow>
