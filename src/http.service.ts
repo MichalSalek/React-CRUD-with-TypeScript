@@ -22,7 +22,7 @@ export class HTTPService {
   }
 
   post(path: string, data: any) {
-    return axios(env + path, {
+    return axios(`${env.apiUrl}${path}`, {
       data,
       headers: {
         ...this.headers,
@@ -33,7 +33,7 @@ export class HTTPService {
   }
 
   put(path: string, data: any) {
-    return axios(env + path, {
+    return axios(`${env.apiUrl}${path}`, {
       data,
       headers: {
         ...this.headers,
@@ -44,7 +44,7 @@ export class HTTPService {
   }
 
   patch(path: string, data: any) {
-    return axios(env + path, {
+    return axios(`${env.apiUrl}${path}`, {
       data,
       headers: {
         ...this.headers,
@@ -54,8 +54,8 @@ export class HTTPService {
     });
   }
 
-  delete(path: string, data: any) {
-    return axios(env + path, {
+  delete(path: string, data?: any) {
+    return axios(`${env.apiUrl}${path}`, {
       data,
       headers: {
         ...this.headers,

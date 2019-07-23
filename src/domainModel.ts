@@ -28,6 +28,7 @@ export type BookApiCollection = Omit<BookApiItem, '@context'>;
 
 export interface BookApiItem {
   '@id': string;
+  id: string;
   '@type': string;
   '@context': string;
   isbn: string;
