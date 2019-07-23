@@ -16,6 +16,7 @@ const useStyles = makeStyles({
   appPaper: {
     color: '#444',
     margin: '84px',
+    minWidth: 'fit-content',
     padding: '1rem',
   },
 });

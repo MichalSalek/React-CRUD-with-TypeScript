@@ -1,6 +1,8 @@
 import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+import { Book, DeleteOutline } from '@material-ui/icons';
+import IconButton from '@material-ui/core/IconButton';
 
 import { IDataPreparedForTable } from './books-list.model';
 
@@ -19,7 +21,14 @@ const SingleBookRecord = ({ data }: IProps) => {
             </TableCell>
             <TableCell> {val.title}</TableCell>
             <TableCell> {val.author}</TableCell>
-            <TableCell> ikonki</TableCell>
+            <TableCell>
+              <IconButton aria-label="Show" color="primary">
+                <Book />
+              </IconButton>
+              <IconButton aria-label="Show" color="primary">
+                <DeleteOutline />
+              </IconButton>
+            </TableCell>
           </TableRow>
         );
       })}
