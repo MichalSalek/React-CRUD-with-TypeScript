@@ -18,7 +18,8 @@ import { IDataPreparedForTable } from './books-list.model';
 
 const useStyles = makeStyles({
   close: {
-    padding: '0.5rem',
+    background: 'gray',
+    margin: '0.5rem',
   },
   tableHead: {
     background: 'white',
@@ -78,23 +79,23 @@ const BooksList: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    arrangeData(listOfBooks);
-  }, [listOfBooks]);
+    const arrangeDataForRender = (data: BookApiItem[]) => {
+      const helperArrangedData: IDataPreparedForTable[] = [];
+      data.forEach((val: BookApiCollection) => {
+        helperArrangedData.push(
+          createRow(
+            val.id,
+            val.attributes.isbn,
+            val.attributes.title,
+            val.attributes.author,
+          ),
+        );
+      });
+      setArrangedData(helperArrangedData);
+    };
 
-  const arrangeData = (data: BookApiItem[]) => {
-    const helperArrangedData: IDataPreparedForTable[] = [];
-    data.forEach((val: BookApiCollection) => {
-      helperArrangedData.push(
-        createRow(
-          val.id,
-          val.attributes.isbn,
-          val.attributes.title,
-          val.attributes.author,
-        ),
-      );
-    });
-    setArrangedData(helperArrangedData);
-  };
+    arrangeDataForRender(listOfBooks);
+  }, [listOfBooks]);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {

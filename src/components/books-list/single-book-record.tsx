@@ -1,4 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { BrowserRouter as Router, Link } from 'react-router-dom';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Book, DeleteOutline } from '@material-ui/icons';
@@ -47,9 +49,11 @@ const SingleBookRecord = ({
             <TableCell> {val.title}</TableCell>
             <TableCell> {val.author}</TableCell>
             <TableCell>
-              <IconButton aria-label="Show" color="primary">
-                <Book />
-              </IconButton>
+              <Link to="/book1">
+                <IconButton aria-label="Show" color="primary">
+                  <Book />
+                </IconButton>
+              </Link>
               <IconButton
                 id={val.id}
                 onClick={deleteBook}
