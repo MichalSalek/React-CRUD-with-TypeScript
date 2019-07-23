@@ -16,15 +16,8 @@ interface IProps {
   closeAlert: (arg0: boolean) => void;
 }
 
-const SingleBookRecord = ({
-  data,
-  actionProps,
-  openAlert,
-  closeAlert,
-}: IProps) => {
-  const deleteBook = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
+const SingleBookRecord = ({ data, actionProps, openAlert, closeAlert }: IProps) => {
+  const deleteBook = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const IDOfBook = event.currentTarget.id;
 
     http
@@ -54,12 +47,7 @@ const SingleBookRecord = ({
                   <Book />
                 </IconButton>
               </Link>
-              <IconButton
-                id={val.id}
-                onClick={deleteBook}
-                aria-label="Show"
-                color="primary"
-              >
+              <IconButton id={val.id} onClick={deleteBook} aria-label="Show" color="primary">
                 <DeleteOutline />
               </IconButton>
             </TableCell>

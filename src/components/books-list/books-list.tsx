@@ -44,9 +44,7 @@ const BooksList: FunctionComponent = () => {
   const [listOfBooks, setListOfBooks] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>(
-    [],
-  );
+  const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>([]);
 
   const callForBooks = (path: string, page: number) => {
     http
@@ -69,12 +67,7 @@ const BooksList: FunctionComponent = () => {
     setPageNumber(newPage);
   };
 
-  const createRow = (
-    id: string,
-    isbn: string,
-    title: string,
-    author: string,
-  ) => {
+  const createRow = (id: string, isbn: string, title: string, author: string) => {
     return { author, id, isbn, title };
   };
 
@@ -83,12 +76,7 @@ const BooksList: FunctionComponent = () => {
       const helperArrangedData: IDataPreparedForTable[] = [];
       data.forEach((val: BookApiCollection) => {
         helperArrangedData.push(
-          createRow(
-            val.id,
-            val.attributes.isbn,
-            val.attributes.title,
-            val.attributes.author,
-          ),
+          createRow(val.id, val.attributes.isbn, val.attributes.title, val.attributes.author),
         );
       });
       setArrangedData(helperArrangedData);
@@ -172,9 +160,7 @@ const BooksList: FunctionComponent = () => {
         open={openError}
         autoHideDuration={6000}
         onClose={handleClose}
-        message={
-          <span id="message-id">OH NO! We could not delete the book.</span>
-        }
+        message={<span id="message-id">OH NO! We could not delete the book.</span>}
         action={[
           <IconButton
             key="close"
