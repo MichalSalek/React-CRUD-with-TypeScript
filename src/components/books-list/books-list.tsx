@@ -9,7 +9,7 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import { Close } from '@material-ui/icons';
 
 import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
@@ -142,6 +142,9 @@ const BooksList: FunctionComponent = () => {
           horizontal: 'left',
           vertical: 'bottom',
         }}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
         open={openSuccess}
         autoHideDuration={6000}
         onClose={handleClose}
@@ -154,7 +157,7 @@ const BooksList: FunctionComponent = () => {
             className={classes.close}
             onClick={handleClose}
           >
-            <CloseIcon />
+            <Close />
           </IconButton>,
         ]}
       />
@@ -162,6 +165,9 @@ const BooksList: FunctionComponent = () => {
         anchorOrigin={{
           horizontal: 'left',
           vertical: 'bottom',
+        }}
+        ContentProps={{
+          'aria-describedby': 'message-id',
         }}
         open={openError}
         autoHideDuration={6000}
@@ -177,7 +183,7 @@ const BooksList: FunctionComponent = () => {
             className={classes.close}
             onClick={handleClose}
           >
-            <CloseIcon />
+            <Close />
           </IconButton>,
         ]}
       />
