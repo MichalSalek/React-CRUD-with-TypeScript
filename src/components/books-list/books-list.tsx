@@ -25,6 +25,7 @@ const useStyles = makeStyles({
     boxShadow: '0px 5px 8px -3px rgba(0,0,0,0.3)',
     position: 'sticky',
     top: '60px',
+    zIndex: 10,
   },
 });
 
