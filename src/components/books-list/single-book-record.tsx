@@ -2,18 +2,28 @@ import React from 'react';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-interface IProps {}
+import { IDataPreparedForTable } from './books-list.model';
 
-const SingleBookRecord = (props: IProps) => {
+interface IProps {
+  data: IDataPreparedForTable[];
+}
+
+const SingleBookRecord = ({ data }: IProps) => {
   return (
-    <TableRow>
-      <TableCell component="th" scope="row">
-        isbn 1
-      </TableCell>
-      <TableCell> title 1</TableCell>
-      <TableCell> author 1</TableCell>
-      <TableCell> ikonki</TableCell>
-    </TableRow>
+    <React.Fragment>
+      {data.map((val, index: number) => {
+        return (
+          <TableRow key={String(val) + String(index)}>
+            <TableCell component="th" scope="row">
+              {val.isbn}
+            </TableCell>
+            <TableCell> {val.title}</TableCell>
+            <TableCell> {val.author}</TableCell>
+            <TableCell> ikonki</TableCell>
+          </TableRow>
+        );
+      })}
+    </React.Fragment>
   );
 };
 

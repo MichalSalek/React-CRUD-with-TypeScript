@@ -36,4 +36,5 @@ export interface BookApiItem {
   author: string;
   publicationDate: string;
   reviews: Pick<ReviewApiItem, '@id' | '@type' | 'body'>[];
+  attributes: BookCreate;
 }
