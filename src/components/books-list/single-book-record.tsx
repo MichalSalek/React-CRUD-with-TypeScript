@@ -16,15 +16,8 @@ interface IProps {
   closeAlert: (arg0: boolean) => void;
 }
 
-const SingleBookRecord = ({
-  data,
-  actionProps,
-  openAlert,
-  closeAlert,
-}: IProps) => {
-  const deleteBook = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
+const SingleBookRecord = ({ data, actionProps, openAlert, closeAlert }: IProps) => {
+  const deleteBook = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const IDOfBook = event.currentTarget.id;
 
     http
@@ -43,25 +36,30 @@ const SingleBookRecord = ({
       {data.map((val, index: number) => {
         return (
           <TableRow key={String(val) + String(index)}>
-            <TableCell component="th" scope="row">
+            <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
               {val.isbn}
             </TableCell>
-            <TableCell> {val.title}</TableCell>
-            <TableCell> {val.author}</TableCell>
-            <TableCell>
-              <Link to={val.id}>
-                <IconButton aria-label="Show" color="primary">
-                  <Book />
-                </IconButton>
-              </Link>
-              <IconButton
-                id={val.id}
-                onClick={deleteBook}
-                aria-label="Show"
-                color="primary"
-              >
-                <DeleteOutline />
-              </IconButton>
+            <TableCell component="th" scope="row" style={{ width: '60%' }}>
+              {val.title}
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '40%' }}>
+              {val.author}
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
+              <div style={{ display: 'flex' }}>
+                <span>
+                  <Link to={val.id}>
+                    <IconButton aria-label="Show" color="primary">
+                      <Book />
+                    </IconButton>
+                  </Link>
+                </span>
+                <span>
+                  <IconButton id={val.id} onClick={deleteBook} aria-label="Show" color="primary">
+                    <DeleteOutline />
+                  </IconButton>
+                </span>
+              </div>
             </TableCell>
           </TableRow>
         );

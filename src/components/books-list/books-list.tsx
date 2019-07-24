@@ -18,11 +18,17 @@ import { IDataPreparedForTable } from './books-list.model';
 
 const useStyles = makeStyles({
   close: {
-    background: 'gray',
+    background: '#111',
     margin: '0.5rem',
   },
+  headerCell: {
+    fontSize: '0.8rem',
+    fontWeight: 'bold',
+    letterSpacing: '0.07rem',
+  },
   tableHead: {
-    background: 'white',
+    background: '#fafafa',
+    borderTop: '1px solid #ddd',
     boxShadow: '0px 5px 8px -3px rgba(0,0,0,0.3)',
     position: 'sticky',
     top: '60px',
@@ -44,9 +50,7 @@ const BooksList: FunctionComponent = () => {
   const [listOfBooks, setListOfBooks] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>(
-    [],
-  );
+  const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>([]);
 
   const callForBooks = (path: string, page: number) => {
     http
@@ -69,12 +73,7 @@ const BooksList: FunctionComponent = () => {
     setPageNumber(newPage);
   };
 
-  const createRow = (
-    id: string,
-    isbn: string,
-    title: string,
-    author: string,
-  ) => {
+  const createRow = (id: string, isbn: string, title: string, author: string) => {
     return { author, id, isbn, title };
   };
 
@@ -83,12 +82,7 @@ const BooksList: FunctionComponent = () => {
       const helperArrangedData: IDataPreparedForTable[] = [];
       data.forEach((val: BookApiCollection) => {
         helperArrangedData.push(
-          createRow(
-            val.id,
-            val.attributes.isbn,
-            val.attributes.title,
-            val.attributes.author,
-          ),
+          createRow(val.id, val.attributes.isbn, val.attributes.title, val.attributes.author),
         );
       });
       setArrangedData(helperArrangedData);
@@ -109,7 +103,7 @@ const BooksList: FunctionComponent = () => {
     <section>
       <Table>
         <TableHead className={classes.tableHead}>
-          <TableRow>
+          <TableRow className={classes.headerCell}>
             <TableCell>ISBN: </TableCell>
             <TableCell>Title: </TableCell>
             <TableCell>Author:</TableCell>
@@ -172,9 +166,7 @@ const BooksList: FunctionComponent = () => {
         open={openError}
         autoHideDuration={6000}
         onClose={handleClose}
-        message={
-          <span id="message-id">OH NO! We could not delete the book.</span>
-        }
+        message={<span id="message-id">OH NO! We could not delete the book.</span>}
         action={[
           <IconButton
             key="close"
