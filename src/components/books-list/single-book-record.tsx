@@ -49,7 +49,7 @@ const SingleBookRecord = ({
             <TableCell> {val.title}</TableCell>
             <TableCell> {val.author}</TableCell>
             <TableCell>
-              <Link to="/book1">
+              <Link to={val.id}>
                 <IconButton aria-label="Show" color="primary">
                   <Book />
                 </IconButton>

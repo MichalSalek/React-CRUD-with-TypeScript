@@ -23,8 +23,6 @@ const useStyles = makeStyles({
   },
 });
 
-const idksiazkizreduxa = '1';
-
 function App() {
   const classes = useStyles();
 
@@ -36,7 +34,7 @@ function App() {
         <AppBodyHeadingBar styles={classes.appBodyHeadingBar} />
         <Router>
           <Route exact path="/" component={BooksList} />
-          <Route path={`/book${idksiazkizreduxa}`} component={BookEditor} />
+          <Route path="/books/:bookID" component={BookEditor} />
         </Router>
       </Paper>
     </main>
