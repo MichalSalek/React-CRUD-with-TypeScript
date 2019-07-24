@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { Edit, ArrowBack } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { IStore } from '../../react-redux/redux';
 
@@ -22,17 +23,21 @@ const AppBodyHeadingBar = (props: IProps & IStore) => {
       <Typography variant="h5" color="inherit">
         Books
       </Typography>
-      <IconButton aria-label="Create" color="primary">
-        {' '}
-        {editorMode ? (
-          <Link to="/">
-            {' '}
-            <ArrowBack />{' '}
-          </Link>
-        ) : (
-          <Edit />
-        )}
-      </IconButton>
+      {editorMode ? (
+        <Tooltip title="Back">
+          <IconButton aria-label="Back" color="primary">
+            <Link to="/">
+              <ArrowBack />
+            </Link>
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Create">
+          <IconButton aria-label="Create" color="primary">
+            <Edit />
+          </IconButton>
+        </Tooltip>
+      )}
     </section>
   );
 };

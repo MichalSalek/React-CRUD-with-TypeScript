@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 
 import http from '../../http.service';
 import { IDataPreparedForTable } from './books-list.model';
+import Tooltip from '@material-ui/core/Tooltip';
 
 interface IProps {
   data: IDataPreparedForTable[];
@@ -35,7 +36,7 @@ const SingleBookRecord = ({ data, actionProps, openAlert, closeAlert }: IProps) 
     <React.Fragment>
       {data.map((val, index: number) => {
         return (
-          <TableRow key={String(val) + String(index)}>
+          <TableRow key={String(val.isbn) + String(index)}>
             <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
               {val.isbn}
             </TableCell>
@@ -49,15 +50,24 @@ const SingleBookRecord = ({ data, actionProps, openAlert, closeAlert }: IProps) 
               <div style={{ display: 'flex' }}>
                 <span>
                   <Link to={val.id}>
-                    <IconButton aria-label="Show" color="primary">
-                      <Book />
-                    </IconButton>
+                    <Tooltip title="Show details">
+                      <IconButton aria-label="Show" color="primary">
+                        <Book />
+                      </IconButton>
+                    </Tooltip>
                   </Link>
                 </span>
                 <span>
-                  <IconButton id={val.id} onClick={deleteBook} aria-label="Show" color="primary">
-                    <DeleteOutline />
-                  </IconButton>
+                  <Tooltip title="Delete book">
+                    <IconButton
+                      id={val.id}
+                      onClick={deleteBook}
+                      aria-label="Delete book"
+                      color="primary"
+                    >
+                      <DeleteOutline />
+                    </IconButton>
+                  </Tooltip>
                 </span>
               </div>
             </TableCell>

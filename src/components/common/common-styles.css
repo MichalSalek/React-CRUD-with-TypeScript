@@ -1,7 +1,10 @@
+* {
+  scroll-behavior: smooth;
+}
+
 body {
   background: #eee !important;
 }
-
 
 /*Inheritance from parent for styling just one node*/
 .MuiTableCell-head {

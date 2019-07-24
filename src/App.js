@@ -8,6 +8,7 @@ import Header from './components/common/header-bar/header-bar';
 import AppBodyHeadingBar from './components/app-body-heading-bar/app-body-heading-bar';
 import BooksList from './components/books-list/books-list';
 import BookEditor from './components/book-editor/book-editor';
+import ScrollToTopIcon from './components/scroll-to-top-icon/scroll-to-top-icon';
 
 const useStyles = makeStyles({
   appBodyHeadingBar: {
@@ -37,6 +38,7 @@ function App() {
           <Route exact path="/" component={BooksList} />
           <Route path="/books/:bookID" component={BookEditor} />
         </Router>
+        <ScrollToTopIcon/>
       </Paper>
     </main>
   );

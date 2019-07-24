@@ -10,13 +10,14 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
+import Tooltip from '@material-ui/core/Tooltip';
+import { connect } from 'react-redux';
 
 import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
 import { BookApiCollection, BookApiItem } from '../../domainModel';
 import { IDataPreparedForTable } from './books-list.model';
 import { setEditorOpen } from '../../react-redux/redux';
-import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
   close: {
@@ -138,6 +139,7 @@ const BooksList: FunctionComponent = (props: any) => {
         </TableFooter>
       </Table>
       <Snackbar
+        key="SnackbaropenSuccess"
         anchorOrigin={{
           horizontal: 'left',
           vertical: 'bottom',
@@ -150,18 +152,21 @@ const BooksList: FunctionComponent = (props: any) => {
         onClose={handleClose}
         message={<span id="message-id">Book deleted!</span>}
         action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            className={classes.close}
-            onClick={handleClose}
-          >
-            <Close />
-          </IconButton>,
+          <Tooltip key="close1" title="Close">
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={handleClose}
+            >
+              <Close />
+            </IconButton>
+          </Tooltip>,
         ]}
       />
       <Snackbar
+        key="SnackbaropenError"
         anchorOrigin={{
           horizontal: 'left',
           vertical: 'bottom',
@@ -174,15 +179,17 @@ const BooksList: FunctionComponent = (props: any) => {
         onClose={handleClose}
         message={<span id="message-id">OH NO! We could not delete the book.</span>}
         action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            className={classes.close}
-            onClick={handleClose}
-          >
-            <Close />
-          </IconButton>,
+          <Tooltip key="close2" title="Close">
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={handleClose}
+            >
+              <Close />
+            </IconButton>
+          </Tooltip>,
         ]}
       />
     </section>
