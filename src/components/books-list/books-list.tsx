@@ -18,11 +18,17 @@ import { IDataPreparedForTable } from './books-list.model';
 
 const useStyles = makeStyles({
   close: {
-    background: 'gray',
+    background: '#111',
     margin: '0.5rem',
   },
+  headerCell: {
+    fontSize: '0.8rem',
+    fontWeight: 'bold',
+    letterSpacing: '0.07rem',
+  },
   tableHead: {
-    background: 'white',
+    background: '#fafafa',
+    borderTop: '1px solid #ddd',
     boxShadow: '0px 5px 8px -3px rgba(0,0,0,0.3)',
     position: 'sticky',
     top: '60px',
@@ -97,7 +103,7 @@ const BooksList: FunctionComponent = () => {
     <section>
       <Table>
         <TableHead className={classes.tableHead}>
-          <TableRow>
+          <TableRow className={classes.headerCell}>
             <TableCell>ISBN: </TableCell>
             <TableCell>Title: </TableCell>
             <TableCell>Author:</TableCell>
