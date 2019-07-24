@@ -2,10 +2,10 @@ import { createStore, DeepPartial } from 'redux';
 
 // ACTIONS
 
-export const setCurrentBookID = (bookID: string) => {
+export const setEditorOpen = (isOpen: string) => {
   return {
-    bookID,
-    type: 'SET_CURRENT_BOOK_ID',
+    isOpen,
+    type: 'SET_EDITOR_IS_OPEN',
   };
 };
 
@@ -13,11 +13,10 @@ export const setCurrentBookID = (bookID: string) => {
 
 export const reducer = (store: any = {}, action: any): IStore => {
   switch (action.type) {
-    case 'SET_CURRENT_BOOK_ID':
-      console.warn(action);
+    case 'SET_EDITOR_IS_OPEN':
       return {
         ...store,
-        bookID: action.bookID,
+        editorIsOpen: action.isOpen,
       };
     default:
       return store;
@@ -27,7 +26,7 @@ export const reducer = (store: any = {}, action: any): IStore => {
 // STORE
 
 export interface IStore extends DeepPartial<IStore> {
-  readonly bookID: string;
+  readonly editorIsOpen: boolean;
 }
 
 const redux = createStore(reducer);

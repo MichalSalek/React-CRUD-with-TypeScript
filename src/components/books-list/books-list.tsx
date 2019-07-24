@@ -15,6 +15,8 @@ import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
 import { BookApiCollection, BookApiItem } from '../../domainModel';
 import { IDataPreparedForTable } from './books-list.model';
+import { setEditorOpen } from '../../react-redux/redux';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
   close: {
@@ -36,7 +38,7 @@ const useStyles = makeStyles({
   },
 });
 
-const BooksList: FunctionComponent = () => {
+const BooksList: FunctionComponent = (props: any) => {
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openError, setOpenError] = useState(false);
 
@@ -98,6 +100,10 @@ const BooksList: FunctionComponent = () => {
     setOpenSuccess(false);
     setOpenError(false);
   };
+
+  useEffect(() => {
+    props.setEditorOpen(false);
+  }, []);
 
   return (
     <section>
@@ -183,4 +189,15 @@ const BooksList: FunctionComponent = () => {
   );
 };
 
-export default BooksList;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setEditorOpen: (boo: any) => dispatch(setEditorOpen(boo)),
+  };
+};
+
+const Component = connect(
+  undefined,
+  mapDispatchToProps,
+)(BooksList);
+
+export default Component;

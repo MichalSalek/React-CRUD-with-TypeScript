@@ -13,6 +13,7 @@ const useStyles = makeStyles({
   appBodyHeadingBar: {
     alignItems: 'center',
     display: 'flex',
+    height: '55px',
     justifyContent: 'space-between',
   },
   appPaper: {
@@ -31,8 +32,8 @@ function App() {
       <CssBaseline />
       <Header />
       <Paper className={classes.appPaper}>
-        <AppBodyHeadingBar styles={classes.appBodyHeadingBar} />
         <Router>
+          <AppBodyHeadingBar styles={classes.appBodyHeadingBar} />
           <Route exact path="/" component={BooksList} />
           <Route path="/books/:bookID" component={BookEditor} />
         </Router>

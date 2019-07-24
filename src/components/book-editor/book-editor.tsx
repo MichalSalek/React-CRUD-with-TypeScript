@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 
-import { setCurrentBookID, IStore } from '../../react-redux/redux';
+import { setEditorOpen, IStore } from '../../react-redux/redux';
 
 // import { makeStyles } from '@material-ui/core';
 // import http from '../../http.service';
@@ -20,28 +19,21 @@ const BookEditor = (props: any) => {
   //     .catch(error => console.error(error));
   // };
 
-  const funkcja = () => {
-    props.setCurrentBookID('ewewew');
-    console.log('funckja:');
-    console.log(props);
-  };
+  useEffect(() => {
+    props.setEditorOpen(true);
+  }, []);
 
 
-  return (
-    <section onClick={funkcja}>
-      Book editor<Link to="">back</Link>
-    </section>
-  );
+  return <section>{props.match.url}</section>;
 };
 
 const mapStateToProps = (store: IStore) => ({
-  bookID: store.bookID,
-  store,
+  editorIsOpen: store.editorIsOpen,
 });
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setCurrentBookID: (bookID: any) => dispatch(setCurrentBookID(bookID)),
+    setEditorOpen: (boo: any) => dispatch(setEditorOpen(boo)),
   };
 };
 
