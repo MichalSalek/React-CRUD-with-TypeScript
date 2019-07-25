@@ -104,7 +104,7 @@ const BooksList: FunctionComponent = (props: any) => {
 
   useEffect(() => {
     props.setEditorOpen(false);
-  }, []);
+  }, [props]);
 
   return (
     <section>

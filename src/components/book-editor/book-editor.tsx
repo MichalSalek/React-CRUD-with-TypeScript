@@ -67,11 +67,11 @@ const BookEditor = (props: any) => {
 
   useEffect(() => {
     props.setEditorOpen(true);
-  }, []);
+  }, [props]);
 
   useEffect(() => {
     props.setCurrentTitle(titleState);
-  }, [titleState]);
+  }, [titleState, props]);
 
   const callForSingleBook = (path: string) => {
     http
@@ -141,7 +141,7 @@ const BookEditor = (props: any) => {
 
   useEffect(() => {
     setSubmitting(compareChecksum(checksumString, newValuesString));
-  }, [newValuesString]);
+  }, [checksumString, newValuesString]);
 
   const putNewDataToThisBook = (path: string) => {
     const data = {
