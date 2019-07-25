@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
 
 import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux';
 import dateConverter from './date-converter';
@@ -16,13 +17,16 @@ import { Close } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
+    button: {
+      margin: theme.spacing(1),
     },
     close: {
       background: '#111',
       margin: '0.5rem',
+    },
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
     },
     textField: {
       marginLeft: theme.spacing(1),
@@ -243,6 +247,7 @@ const BookEditor = (props: any) => {
                 label="Publication date"
                 type="date"
                 placeholder="Enter a publication date."
+                fullWidth
                 margin="normal"
                 variant="outlined"
                 onChange={handleChange}
@@ -252,10 +257,15 @@ const BookEditor = (props: any) => {
                   shrink: true,
                 }}
               />
-              <button disabled={submitting} type="submit">
-                {' '}
-                Update informations{' '}
-              </button>
+              <Button
+                disabled={submitting}
+                type="submit"
+                variant="outlined"
+                color="primary"
+                className={classes.button}
+              >
+                Update
+              </Button>
             </form>
           )}
         </Formik>
