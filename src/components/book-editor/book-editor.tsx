@@ -109,18 +109,6 @@ const BookEditor = (props: any) => {
     callForSingleBook(url);
   }, [url]);
 
-  // useEffect(() =>
-  //   console.warn(
-  //     callResolve,
-  //     titleState,
-  //     ISBNState,
-  //     descriptionState,
-  //     authorState,
-  //     publicationDateState,
-  //     reviewsState,
-  //   ),
-  // );
-
   const handleChange = (e: any) => {
     switch (e.currentTarget.id) {
       case 'book-title':
@@ -171,7 +159,7 @@ const BookEditor = (props: any) => {
         handleOpenSuccessAlert();
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
         setSubmitting(false);
         handleOpenErrorAlert();
       });
@@ -336,8 +324,6 @@ const BookEditor = (props: any) => {
 
 const mapStateToProps = (store: IStore) => ({
   editorIsOpen: store.editorIsOpen,
-  // console.log <-- to delete :-)
-  store,
 });
 
 const mapDispatchToProps = (dispatch: any) => {
