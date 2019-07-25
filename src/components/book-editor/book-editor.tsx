@@ -7,17 +7,22 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core';
 
 import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux';
 import dateConverter from './date-converter';
-
 import http from '../../http.service';
 import compareChecksum from './checksum-comparision';
-// import { BookApiCollection, BookApiItem } from '../../domainModel';
-// import { IDataPreparedForTable } from './books-list.model';
+import Snackbar from '@material-ui/core/Snackbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import { Close } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       display: 'flex',
       flexWrap: 'wrap',
+    },
+    close: {
+      background: '#111',
+      margin: '0.5rem',
     },
     textField: {
       marginLeft: theme.spacing(1),
@@ -37,10 +42,28 @@ const BookEditor = (props: any) => {
   const [descriptionState, setDescriptionState] = useState('Loading...');
   const [authorState, setAuthorState] = useState('Loading...');
   const [publicationDateState, setPublicationDateState] = useState('Loading...');
-  const [reviewsState, setReviewsState] = useState([]);
   const [checksumString, setChecksumString] = useState('');
   const [newValuesString, setNewValuesString] = useState('');
+  const [reviewsState, setReviewsState] = useState([]);
   const [submitting, setSubmitting] = useState(true);
+
+  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+  const [openErrorAlert, setOpenErrorAlert] = useState(false);
+
+  const handleOpenSuccessAlert = () => {
+    setOpenSuccessAlert(true);
+  };
+  const handleOpenErrorAlert = () => {
+    setOpenErrorAlert(true);
+  };
+
+  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSuccessAlert(false);
+    setOpenErrorAlert(false);
+  };
 
   useEffect(() => {
     props.setEditorOpen(true);
@@ -121,22 +144,43 @@ const BookEditor = (props: any) => {
     return null;
   };
 
+  const setAllValuesStringToComparision = () =>
+    titleState + ISBNState + descriptionState + authorState + publicationDateState;
+
   useEffect(() => {
-    setNewValuesString(
-      titleState + ISBNState + descriptionState + authorState + publicationDateState,
-    );
+    setNewValuesString(setAllValuesStringToComparision());
   }, [titleState, ISBNState, descriptionState, authorState, publicationDateState]);
 
   useEffect(() => {
     setSubmitting(compareChecksum(checksumString, newValuesString));
   }, [newValuesString]);
 
+  const putNewDataToThisBook = (path: string) => {
+    const data = {
+      author: authorState,
+      description: descriptionState,
+      isbn: ISBNState,
+      publicationDate: dateConverter(publicationDateState, 'add-time'),
+      title: titleState,
+    };
+    setChecksumString(setAllValuesStringToComparision());
+    http
+      .put(path, data)
+      .then(() => {
+        setSubmitting(true);
+        handleOpenSuccessAlert();
+      })
+      .catch(error => {
+        console.log(error);
+        setSubmitting(false);
+        handleOpenErrorAlert();
+      });
+  };
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 2000);
+    putNewDataToThisBook(url);
   };
 
   return (
@@ -232,6 +276,60 @@ const BookEditor = (props: any) => {
           <CircularProgress /> <span> Loading your book info... </span>
         </>
       )}
+      <Snackbar
+        key="SnackbaropenSuccess"
+        anchorOrigin={{
+          horizontal: 'left',
+          vertical: 'bottom',
+        }}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        open={openSuccessAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+        message={<span id="message-id">Book information has been updated!</span>}
+        action={[
+          <Tooltip key="close1" title="Close">
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={handleCloseAlert}
+            >
+              <Close />
+            </IconButton>
+          </Tooltip>,
+        ]}
+      />
+      <Snackbar
+        key="SnackbaropenError"
+        anchorOrigin={{
+          horizontal: 'left',
+          vertical: 'bottom',
+        }}
+        ContentProps={{
+          'aria-describedby': 'message-id',
+        }}
+        open={openErrorAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+        message={<span id="message-id">Something went wrong with the update.</span>}
+        action={[
+          <Tooltip key="close2" title="Close">
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              className={classes.close}
+              onClick={handleCloseAlert}
+            >
+              <Close />
+            </IconButton>
+          </Tooltip>,
+        ]}
+      />
     </React.Fragment>
   );
 };
