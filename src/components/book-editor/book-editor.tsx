@@ -5,15 +5,16 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import { Close } from '@material-ui/icons';
 
 import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux';
 import dateConverter from './date-converter';
 import http from '../../http.service';
 import compareChecksum from './checksum-comparision';
-import Snackbar from '@material-ui/core/Snackbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import { Close } from '@material-ui/icons';
+import ReviewsComponent from '../reviews/reviews';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,7 +49,6 @@ const BookEditor = (props: any) => {
   const [publicationDateState, setPublicationDateState] = useState('Loading...');
   const [checksumString, setChecksumString] = useState('');
   const [newValuesString, setNewValuesString] = useState('');
-  const [reviewsState, setReviewsState] = useState([]);
   const [submitting, setSubmitting] = useState(true);
 
   const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
@@ -86,7 +86,6 @@ const BookEditor = (props: any) => {
           return null;
         }
         const rawData = result.data.data.attributes;
-        const relationshipsForBook = result.data.data.relationships;
         setChecksumString(
           rawData.title +
             rawData.isbn +
@@ -101,7 +100,6 @@ const BookEditor = (props: any) => {
         setAuthorState(rawData.author);
         setPublicationDateState(dateConverter(rawData.publicationDate, 'cut-time'));
 
-        setReviewsState(relationshipsForBook.reviews.data);
         setCallResolve(true);
         return null;
       })
@@ -328,6 +326,7 @@ const BookEditor = (props: any) => {
           </Tooltip>,
         ]}
       />
+      <ReviewsComponent bookID={url} />
     </React.Fragment>
   );
 };
