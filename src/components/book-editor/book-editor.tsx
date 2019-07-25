@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux';
 
@@ -8,10 +9,6 @@ import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux'
 import http from '../../http.service';
 // import { BookApiCollection, BookApiItem } from '../../domainModel';
 // import { IDataPreparedForTable } from './books-list.model';
-
-interface IGetResponse {
-  status: number;
-}
 
 const BookEditor = (props: any) => {
   const { match } = props;
@@ -105,7 +102,9 @@ const BookEditor = (props: any) => {
           )}
         </Formik>
       ) : (
-        'Loading your book info...'
+        <>
+          <CircularProgress /> <span> Loading your book info... </span>
+        </>
       )}
     </React.Fragment>
   );
@@ -113,6 +112,7 @@ const BookEditor = (props: any) => {
 
 const mapStateToProps = (store: IStore) => ({
   editorIsOpen: store.editorIsOpen,
+  // console.log <-- to delete :-)
   store,
 });
 
