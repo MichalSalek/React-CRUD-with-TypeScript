@@ -13,15 +13,16 @@ interface IProps {
 }
 
 const AppBodyHeadingBar = (props: IProps & IStore) => {
-  const { styles, editorIsOpen } = props;
+  const { styles, editorIsOpen, currentTitle } = props;
   const [editorMode, setEditorMode] = useState(false);
   useEffect(() => {
     setEditorMode(editorIsOpen);
   }, [editorIsOpen]);
+
   return (
     <section className={styles}>
       <Typography variant="h5" color="inherit">
-        Books
+        {editorMode ? currentTitle : 'Books'}
       </Typography>
       {editorMode ? (
         <Tooltip title="Back">
@@ -43,6 +44,7 @@ const AppBodyHeadingBar = (props: IProps & IStore) => {
 };
 
 const mapStateToProps = (store: IStore) => ({
+  currentTitle: store.currentTitle,
   editorIsOpen: store.editorIsOpen,
 });
 
