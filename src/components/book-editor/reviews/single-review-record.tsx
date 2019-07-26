@@ -39,7 +39,7 @@ const SingleReviewRecord = ({ data, openAlert, closeAlert, rowsPerPage, pageNumb
         .slice(pageNumber * rowsPerPage, pageNumber * rowsPerPage + rowsPerPage)
         .map((val, index: number) => {
           return (
-            <TableRow key={String(val.reviewBody) + String(index)}>
+            <TableRow key={String(val.reviewBody) + String(index)} className="table-row-custom">
               <TableCell component="th" scope="row" style={{ width: '80%' }}>
                 {val.reviewBody}
               </TableCell>

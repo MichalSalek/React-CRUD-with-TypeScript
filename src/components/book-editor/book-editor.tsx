@@ -176,6 +176,7 @@ const BookEditor = (props: IProps) => {
       .then(() => {
         setSubmitting(true);
         handleOpenSuccessAlert();
+        props.appLoading(false);
       })
       .catch(error => {
         console.error(error);
@@ -186,6 +187,7 @@ const BookEditor = (props: IProps) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    props.appLoading(true);
     setSubmitting(true);
     putNewDataToThisBook(url);
   };

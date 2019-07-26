@@ -17,3 +17,12 @@ body {
   font-weight: inherit !important;
   letter-spacing: inherit !important;
 }
+
+.table-row-custom {
+  background: inherit;
+  transition: 0.1s all ease;
+}
+
+.table-row-custom:hover {
+  background: #f8f7ff;
+}

@@ -7,10 +7,22 @@ import { Book, DeleteOutline } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
+import Badge from '@material-ui/core/Badge';
+import { withStyles, Theme } from '@material-ui/core/styles';
 
 import http from '../../http.service';
 import { IDataPreparedForTable } from './books-list.model';
 import { appLoading } from '../../react-redux/redux';
+
+const StyledBadge = withStyles((theme: Theme) => ({
+  badge: {
+    border: `2px solid ${
+      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
+    }`,
+    right: -5,
+    top: '50%',
+  },
+}))(Badge);
 
 interface IProps {
   data: IDataPreparedForTable[];
@@ -38,7 +50,7 @@ const SingleBookRecord = (props: IProps) => {
     <React.Fragment>
       {data.map((val, index: number) => {
         return (
-          <TableRow key={String(val.isbn) + String(index)}>
+          <TableRow key={String(val.isbn) + String(index)} className="table-row-custom">
             <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
               {val.isbn}
             </TableCell>
@@ -54,7 +66,9 @@ const SingleBookRecord = (props: IProps) => {
                   <Link onClick={() => props.appLoading(true)} to={val.id}>
                     <Tooltip title="Show details">
                       <IconButton aria-label="Show" color="primary">
-                        <Book />
+                        <StyledBadge badgeContent={val.reviewsAmount} color="inherit">
+                          <Book />
+                        </StyledBadge>
                       </IconButton>
                     </Tooltip>
                   </Link>

@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
@@ -56,6 +57,7 @@ const BooksList = (props: IProps & IStore) => {
     setOpenError(true);
   };
   const classes = useStyles();
+  const [callResolve, setCallResolve] = useState(false);
   const [listOfBooks, setListOfBooks] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
@@ -67,6 +69,7 @@ const BooksList = (props: IProps & IStore) => {
       .then(result => {
         setListOfBooks(result.data.data);
         setTotalItems(result.data.meta.totalItems);
+        setCallResolve(true);
         props.appLoading(false);
       })
       .catch(error => console.error(error));
@@ -84,17 +87,35 @@ const BooksList = (props: IProps & IStore) => {
     setPageNumber(newPage);
   };
 
-  const createRow = (id: string, isbn: string, title: string, author: string) => {
-    return { author, id, isbn, title };
+  const createRow = (
+    id: string,
+    isbn: string,
+    title: string,
+    author: string,
+    reviewsAmount?: number,
+  ) => {
+    return { author, id, isbn, reviewsAmount, title };
   };
 
   useEffect(() => {
     const arrangeDataForRender = (data: BookApiItem[]) => {
       const helperArrangedData: IDataPreparedForTable[] = [];
       data.forEach((val: BookApiCollection) => {
+        let forBadgesLegnth = 0;
+        if (val.relationships) {
+          const forBadges = val.relationships.reviews.data;
+          forBadgesLegnth = forBadges.length;
+        }
         helperArrangedData.push(
-          createRow(val.id, val.attributes.isbn, val.attributes.title, val.attributes.author),
+          createRow(
+            val.id,
+            val.attributes.isbn,
+            val.attributes.title,
+            val.attributes.author,
+            forBadgesLegnth,
+          ),
         );
+        return null;
       });
       setArrangedData(helperArrangedData.reverse());
     };
@@ -116,35 +137,41 @@ const BooksList = (props: IProps & IStore) => {
 
   return (
     <section>
-      <Table>
-        <TableHead className={classes.tableHead}>
-          <TableRow className={classes.headerCell}>
-            <TableCell>ISBN: </TableCell>
-            <TableCell>Title: </TableCell>
-            <TableCell>Author:</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <SingleBookRecord
-            data={arrangedData}
-            openAlert={handleOpenSuccess}
-            closeAlert={handleOpenError}
-          />
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[30]}
-              colSpan={12}
-              count={totalItems}
-              rowsPerPage={30}
-              page={pageNumber}
-              onChangePage={handleChangePage}
+      {callResolve ? (
+        <Table>
+          <TableHead className={classes.tableHead}>
+            <TableRow className={classes.headerCell}>
+              <TableCell>ISBN: </TableCell>
+              <TableCell>Title: </TableCell>
+              <TableCell>Author:</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <SingleBookRecord
+              data={arrangedData}
+              openAlert={handleOpenSuccess}
+              closeAlert={handleOpenError}
             />
-          </TableRow>
-        </TableFooter>
-      </Table>
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[30]}
+                colSpan={12}
+                count={totalItems}
+                rowsPerPage={30}
+                page={pageNumber}
+                onChangePage={handleChangePage}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
+      ) : (
+        <>
+          <CircularProgress /> <span> Loading the books... </span>
+        </>
+      )}
       <Snackbar
         key="SnackbaropenSuccess"
         anchorOrigin={{

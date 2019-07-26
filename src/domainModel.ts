@@ -1,9 +1,8 @@
 export type Resource = 'books' | 'reviews';
 
-export type ReviewCreate = Pick<
-  ReviewApiItem,
-  'body' | 'rating' | 'author' | 'publicationDate'
-> & { book: string };
+export type ReviewCreate = Pick<ReviewApiItem, 'body' | 'rating' | 'author' | 'publicationDate'> & {
+  book: string;
+};
 
 export type ReviewApiCollection = Omit<ReviewApiItem, '@context'>;
 
@@ -40,4 +39,5 @@ export interface BookApiItem {
   publicationDate: string;
   reviews: Pick<ReviewApiItem, '@id' | '@type' | 'body'>[];
   attributes: BookCreate;
+  relationships?: { reviews: { data: ReviewApiItem[] } };
 }

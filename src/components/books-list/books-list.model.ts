@@ -4,4 +4,5 @@ export interface IDataPreparedForTable {
   id: string;
   isbn: string;
   title: string;
+  reviewsAmount?: number;
 }

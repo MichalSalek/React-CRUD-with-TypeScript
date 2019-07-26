@@ -5,6 +5,9 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { connect } from 'react-redux';
+import IconButton from '@material-ui/core/IconButton';
+import { Message } from '@material-ui/icons';
+
 import { IStore } from '../../../react-redux/redux';
 
 const useStyles = makeStyles({
@@ -24,7 +27,16 @@ const Header = (props: IStore) => {
         <Toolbar>
           <Typography variant="h6" color="inherit">
             Books App (Michał Sałek)
-          </Typography>
+          </Typography>{' '}
+          <a
+            href="https://www.linkedin.com/in/michal-salek/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <IconButton key="Linkedin" aria-label="linkedin" color="secondary">
+              <Message />
+            </IconButton>{' '}
+          </a>
         </Toolbar>
       </AppBar>
     </div>

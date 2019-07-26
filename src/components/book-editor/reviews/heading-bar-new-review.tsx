@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 
 import dateConverter from '../../common/date-converter';
 import http from '../../../http.service';
-import { initReload } from '../../../react-redux/redux';
+import { appLoading, initReload } from '../../../react-redux/redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface IProps {
   url: string;
   initReload: (arg0: number) => void;
+  appLoading: any;
 }
 
 const HeadingBarNewReview = (props: IProps) => {
@@ -135,6 +136,7 @@ const HeadingBarNewReview = (props: IProps) => {
         setReviewBodyState('');
         setAuthorState('');
         setRatingState(0);
+        props.appLoading(false);
       })
       .catch(error => {
         console.error(error);
@@ -145,6 +147,7 @@ const HeadingBarNewReview = (props: IProps) => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    props.appLoading(true);
     setSubmitting(true);
     postNewReview();
   };
@@ -286,6 +289,7 @@ const HeadingBarNewReview = (props: IProps) => {
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    appLoading: (boo: boolean) => dispatch(appLoading(boo)),
     initReload: (number: number) => dispatch(initReload(number)),
   };
 };

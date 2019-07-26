@@ -13,14 +13,15 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
+import { connect } from 'react-redux';
 
 import http from '../../../http.service';
 import SingleReviewRecord from './single-review-record';
 import { ReviewApiCollection, ReviewApiItem } from '../../../domainModel';
 import { IDataPreparedForTable } from './reviews.model';
 import dateConverter from '../../common/date-converter';
-import { IStore, setCurrentTitle, setEditorOpen } from '../../../react-redux/redux';
-import { connect } from 'react-redux';
+import { IStore } from '../../../react-redux/redux';
+
 
 const useStyles = makeStyles({
   close: {
