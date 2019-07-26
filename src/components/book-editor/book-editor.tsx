@@ -329,7 +329,7 @@ const BookEditor = (props: any) => {
           </Tooltip>,
         ]}
       />
-      <HeadingBarNewReview BookID={url} />
+      <HeadingBarNewReview url={url} />
       <ReviewsComponent bookID={url} />
     </React.Fragment>
   );
