@@ -49,6 +49,7 @@ const ReviewsComponent = (props: any) => {
 
   const [listOfReviews, setListOfReviews] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [totalItems, setTotalItems] = useState(0);
   const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>([]);
 
@@ -76,11 +77,10 @@ const ReviewsComponent = (props: any) => {
           console.error('We have a problem, check network tab.');
           return null;
         }
-        console.log(result);
         setListOfReviews(result.data.data);
         setTotalItems(result.data.meta.totalItems);
         setCallResolve(true);
-        return console.log(result);
+        return null;
       })
       .catch(error => console.error(error));
     return null;
@@ -93,6 +93,13 @@ const ReviewsComponent = (props: any) => {
     setPageNumber(newPage);
   };
 
+  function handleChangeRowsPerPage(
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPageNumber(0);
+  }
+
   const createRow = (
     reviewBody: string,
     rating: number,
@@ -100,7 +107,6 @@ const ReviewsComponent = (props: any) => {
     reviewDate: string,
     id: string,
   ) => {
-    console.warn(author, id, rating, reviewBody, reviewDate);
     return { author, id, rating, reviewBody, reviewDate };
   };
 
@@ -146,17 +152,24 @@ const ReviewsComponent = (props: any) => {
               data={arrangedData}
               openAlert={handleOpenSuccess}
               closeAlert={handleOpenError}
+              rowsPerPage={rowsPerPage}
+              pageNumber={pageNumber}
             />
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[30]}
+                rowsPerPageOptions={[5, 10, 20]}
                 colSpan={12}
                 count={totalItems}
-                rowsPerPage={30}
+                rowsPerPage={rowsPerPage}
                 page={pageNumber}
                 onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+                SelectProps={{
+                  inputProps: { 'aria-label': 'Rows per page' },
+                  native: true,
+                }}
               />
             </TableRow>
           </TableFooter>
