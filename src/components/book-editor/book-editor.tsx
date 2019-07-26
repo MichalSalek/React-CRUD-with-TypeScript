@@ -11,7 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
 
 import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux';
-import dateConverter from './date-converter';
+import dateConverter from '../common/date-converter';
 import http from '../../http.service';
 import compareChecksum from './checksum-comparision';
 import ReviewsComponent from '../reviews/reviews';
@@ -82,7 +82,8 @@ const BookEditor = (props: any) => {
       .get(path)
       .then(result => {
         const statusOfResponse = result.status;
-        if (!statusOfResponse) {
+        if (statusOfResponse !== 200) {
+          console.error('We have a problem, check network tab.');
           return null;
         }
         const rawData = result.data.data.attributes;
@@ -224,6 +225,7 @@ const BookEditor = (props: any) => {
                 className={classes.textField}
                 placeholder="Enter description of the book."
                 fullWidth
+                multiline
                 margin="normal"
                 variant="outlined"
                 onChange={handleChange}

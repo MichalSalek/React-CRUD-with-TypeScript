@@ -8,21 +8,20 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import http from '../../http.service';
-import { IDataPreparedForTable } from './books-list.model';
-
+import { IDataPreparedForTable } from './reviews.model';
 
 interface IProps {
   data: IDataPreparedForTable[];
   openAlert: (arg0: boolean) => void;
   closeAlert: (arg0: boolean) => void;
 }
-
-const SingleBookRecord = ({ data, openAlert, closeAlert }: IProps) => {
-  const deleteBook = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const IDOfBook = event.currentTarget.id;
+//
+const SingleReviewRecord = ({ data, openAlert, closeAlert }: IProps) => {
+  const deleteReview = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const IDOfReview = event.currentTarget.id;
 
     http
-      .delete(String(IDOfBook))
+      .delete(String(IDOfReview))
       .then(result => {
         if (result.status === 204) openAlert(true);
       })
@@ -35,15 +34,18 @@ const SingleBookRecord = ({ data, openAlert, closeAlert }: IProps) => {
     <React.Fragment>
       {data.map((val, index: number) => {
         return (
-          <TableRow key={String(val.isbn) + String(index)}>
+          <TableRow key={String(val.reviewBody) + String(index)}>
             <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
-              {val.isbn}
+              {val.reviewBody}
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '60%' }}>
-              {val.title}
+            <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
+              {val.rating}
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '40%' }}>
+            <TableCell component="th" scope="row" style={{ width: '20%' }}>
               {val.author}
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '10%' }}>
+              {val.reviewDate}
             </TableCell>
             <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
               <div style={{ display: 'flex' }}>
@@ -60,7 +62,7 @@ const SingleBookRecord = ({ data, openAlert, closeAlert }: IProps) => {
                   <Tooltip title="Delete book">
                     <IconButton
                       id={val.id}
-                      onClick={deleteBook}
+                      onClick={deleteReview}
                       aria-label="Delete book"
                       color="primary"
                     >
@@ -77,4 +79,4 @@ const SingleBookRecord = ({ data, openAlert, closeAlert }: IProps) => {
   );
 };
 
-export default SingleBookRecord;
+export default SingleReviewRecord;

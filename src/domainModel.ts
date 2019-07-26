@@ -9,6 +9,7 @@ export type ReviewApiCollection = Omit<ReviewApiItem, '@context'>;
 
 export interface ReviewApiItem {
   '@id': string;
+  id: string;
   '@type': string;
   '@context': string;
   body: string;
@@ -17,6 +18,7 @@ export interface ReviewApiItem {
   book: Pick<BookApiItem, '@id' | '@type' | 'title'>;
   author: string;
   publicationDate: string;
+  attributes: ReviewApiItem;
 }
 
 export type BookCreate = Pick<

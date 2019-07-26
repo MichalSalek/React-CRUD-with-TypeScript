@@ -1,33 +1,42 @@
 import React, { useEffect, useState } from 'react';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles, createStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TableBody from '@material-ui/core/TableBody';
+import Table from '@material-ui/core/Table';
 
 import http from '../../http.service';
+import SingleReviewRecord from './single-review-record';
+import { ReviewApiCollection, ReviewApiItem } from '../../domainModel';
+import { IDataPreparedForTable } from './reviews.model';
+import dateConverter from '../common/date-converter';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      margin: theme.spacing(1),
-    },
-    close: {
-      background: '#111',
-      margin: '0.5rem',
-    },
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-  }),
-);
+const useStyles = makeStyles({
+  close: {
+    background: '#111',
+    margin: '0.5rem',
+  },
+  headerCell: {
+    fontSize: '0.8rem',
+  },
+  tableHead: {
+    background: '#fafafa',
+    borderTop: '1px solid #ddd',
+    boxShadow: '0px 5px 8px -3px rgba(0,0,0,0.1)',
+    position: 'sticky',
+    top: '60px',
+    zIndex: 10,
+  },
+});
 
 const ReviewsComponent = (props: any) => {
   const classes = useStyles();
@@ -35,105 +44,184 @@ const ReviewsComponent = (props: any) => {
 
   const [callResolve, setCallResolve] = useState(false);
 
-  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
-  const [openErrorAlert, setOpenErrorAlert] = useState(false);
+  const [openSuccess, setOpenSuccess] = useState(false);
+  const [openError, setOpenError] = useState(false);
 
-  const handleOpenSuccessAlert = () => {
-    setOpenSuccessAlert(true);
+  const [listOfReviews, setListOfReviews] = useState([]);
+  const [pageNumber, setPageNumber] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>([]);
+
+  const handleOpenSuccess = () => {
+    setOpenSuccess(true);
   };
-  const handleOpenErrorAlert = () => {
-    setOpenErrorAlert(true);
+  const handleOpenError = () => {
+    setOpenError(true);
   };
 
-  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
-    setOpenSuccessAlert(false);
-    setOpenErrorAlert(false);
+    setOpenSuccess(false);
+    setOpenError(false);
   };
 
-  const callForSingleBook = (path: string) => {
+  const callForReviewsBundle = (BookID: string) => {
     http
-      .get(path)
+      .get(`/reviews`, BookID)
       .then(result => {
         const statusOfResponse = result.status;
-        if (!statusOfResponse) {
+        if (statusOfResponse !== 200) {
+          console.error('We have a problem, check network tab.');
           return null;
         }
+        console.log(result);
+        setListOfReviews(result.data.data);
+        setTotalItems(result.data.meta.totalItems);
+        setCallResolve(true);
         return console.log(result);
       })
       .catch(error => console.error(error));
     return null;
   };
 
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
+    newPage: number,
+  ) => {
+    setPageNumber(newPage);
+  };
+
+  const createRow = (
+    reviewBody: string,
+    rating: number,
+    author: string,
+    reviewDate: string,
+    id: string,
+  ) => {
+    console.warn(author, id, rating, reviewBody, reviewDate);
+    return { author, id, rating, reviewBody, reviewDate };
+  };
+
   useEffect(() => {
-    callForSingleBook(bookID);
+    const arrangeDataForRender = (data: ReviewApiItem[]) => {
+      const helperArrangedData: IDataPreparedForTable[] = [];
+      data.forEach((val: ReviewApiCollection) => {
+        helperArrangedData.push(
+          createRow(
+            val.attributes.body,
+            val.attributes.rating,
+            val.attributes.author,
+            dateConverter(val.attributes.publicationDate, 'cut-time'),
+            val.id,
+          ),
+        );
+      });
+      setArrangedData(helperArrangedData);
+    };
+
+    arrangeDataForRender(listOfReviews);
+  }, [listOfReviews]);
+
+  useEffect(() => {
+    callForReviewsBundle(bookID);
   }, [bookID]);
 
   return (
     <React.Fragment>
       {callResolve ? (
-        <span>reviews</span>
+        <Table>
+          <TableHead className={classes.tableHead}>
+            <TableRow className={classes.headerCell}>
+              <TableCell>Review: </TableCell>
+              <TableCell>Rating: </TableCell>
+              <TableCell>Author: </TableCell>
+              <TableCell>Date:</TableCell>
+              <TableCell />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <SingleReviewRecord
+              data={arrangedData}
+              openAlert={handleOpenSuccess}
+              closeAlert={handleOpenError}
+            />
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[30]}
+                colSpan={12}
+                count={totalItems}
+                rowsPerPage={30}
+                page={pageNumber}
+                onChangePage={handleChangePage}
+              />
+            </TableRow>
+          </TableFooter>
+        </Table>
       ) : (
         <>
           <CircularProgress /> <span> Loading reviews... </span>
         </>
       )}
-      <Snackbar
-        key="SnackbaropenSuccess"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
-        open={openSuccessAlert}
-        autoHideDuration={6000}
-        onClose={handleCloseAlert}
-        message={<span id="message-id">Book information has been updated!</span>}
-        action={[
-          <Tooltip key="close1" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={classes.close}
-              onClick={handleCloseAlert}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
-      />
-      <Snackbar
-        key="SnackbaropenError"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
-        open={openErrorAlert}
-        autoHideDuration={6000}
-        onClose={handleCloseAlert}
-        message={<span id="message-id">Something went wrong with the update.</span>}
-        action={[
-          <Tooltip key="close2" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={classes.close}
-              onClick={handleCloseAlert}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
-      />
+      <section>
+        <Snackbar
+          key="SnackbaropenSuccess"
+          anchorOrigin={{
+            horizontal: 'left',
+            vertical: 'bottom',
+          }}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          open={openSuccess}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message={<span id="message-id">Review removed by anonymous user :-).</span>}
+          action={[
+            <Tooltip key="close1" title="Close">
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                className={classes.close}
+                onClick={handleClose}
+              >
+                <Close />
+              </IconButton>
+            </Tooltip>,
+          ]}
+        />
+        <Snackbar
+          key="SnackbaropenError"
+          anchorOrigin={{
+            horizontal: 'left',
+            vertical: 'bottom',
+          }}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          open={openError}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message={<span id="message-id">Something went wrong with removal.</span>}
+          action={[
+            <Tooltip key="close2" title="Close">
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                className={classes.close}
+                onClick={handleClose}
+              >
+                <Close />
+              </IconButton>
+            </Tooltip>,
+          ]}
+        />
+      </section>
     </React.Fragment>
   );
 };

@@ -1,4 +1,4 @@
-const dateConverter = (date: string, option: string) => {
+const dateConverter = (date: string, option: "add-time" | "cut-time") => {
   let neededForResult = '';
   switch (option) {
     case 'add-time':

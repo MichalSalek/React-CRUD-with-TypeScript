@@ -120,7 +120,6 @@ const BooksList: FunctionComponent = (props: any) => {
         <TableBody>
           <SingleBookRecord
             data={arrangedData}
-            actionProps={useState()[1]}
             openAlert={handleOpenSuccess}
             closeAlert={handleOpenError}
           />
