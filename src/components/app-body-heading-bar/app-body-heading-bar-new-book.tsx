@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import { Formik } from 'formik';
 import Snackbar from '@material-ui/core/Snackbar';
 
-import { initReload, IStore } from '../../react-redux/redux';
+import { appLoading, initReload, IStore } from '../../react-redux/redux';
 import dateConverter from '../common/date-converter';
 import validateISBN from '../common/validate-isbn';
 import http from '../../http.service';
@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps extends IStore {
   initReload: any;
+  appLoading: any;
 }
 
 const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
@@ -163,6 +164,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
         setISBNState('');
         setDescriptionState('');
         setAuthorState('');
+        props.appLoading(false);
       })
       .catch(error => {
         console.error(error);
@@ -172,6 +174,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    props.appLoading(true);
     setSubmitting(true);
     sendNewBook();
   };
@@ -362,6 +365,7 @@ const mapStateToProps = (store: IStore) => ({
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    appLoading: (boo: boolean) => dispatch(appLoading(boo)),
     initReload: (number: number) => dispatch(initReload(number)),
   };
 };

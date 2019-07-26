@@ -2,6 +2,11 @@
   scroll-behavior: smooth;
 }
 
+html {
+  width:100vw;
+  overflow-x:hidden;
+}
+
 body {
   background: #eee !important;
 }

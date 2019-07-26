@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
 
-import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux';
+import { setEditorOpen, setCurrentTitle, IStore, appLoading } from '../../react-redux/redux';
 import dateConverter from '../common/date-converter';
 import http from '../../http.service';
 import compareChecksum from './checksum-comparision';
@@ -38,7 +38,14 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const BookEditor = (props: any) => {
+interface IProps extends IStore {
+  appLoading: any;
+  setCurrentTitle: any;
+  setEditorOpen: any;
+  match: { url: string };
+}
+
+const BookEditor = (props: IProps) => {
   const classes = useStyles();
   const { match } = props;
   const { url } = match;
@@ -105,6 +112,7 @@ const BookEditor = (props: any) => {
         setPublicationDateState(dateConverter(rawData.publicationDate, 'cut-time'));
 
         setCallResolve(true);
+        props.appLoading(false);
         return null;
       })
       .catch(error => console.error(error));
@@ -352,6 +360,7 @@ const mapStateToProps = (store: IStore) => ({
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    appLoading: (boo: boolean) => dispatch(appLoading(boo)),
     setCurrentTitle: (string: string) => dispatch(setCurrentTitle(string)),
     setEditorOpen: (boo: boolean) => dispatch(setEditorOpen(boo)),
   };

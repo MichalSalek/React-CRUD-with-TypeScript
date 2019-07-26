@@ -24,6 +24,13 @@ export const initReload = (num: number) => {
   };
 };
 
+export const appLoading = (loading: boolean) => {
+  return {
+    loading,
+    type: 'APP_LOADER',
+  };
+};
+
 // REDUCER
 
 export const reducer = (store: any = {}, action: any): IStore => {
@@ -43,6 +50,11 @@ export const reducer = (store: any = {}, action: any): IStore => {
         ...store,
         initReload: action.init,
       };
+    case 'APP_LOADER':
+      return {
+        ...store,
+        appLoading: action.loading,
+      };
     default:
       return store;
   }
@@ -54,9 +66,11 @@ export interface IStore extends DeepPartial<IStore> {
   readonly editorIsOpen: boolean;
   readonly currentTitle: string;
   readonly initReload: number;
+  readonly appLoading: boolean;
 }
 
 const storeInitialization: IStore = {
+  appLoading: false,
   currentTitle: '',
   editorIsOpen: false,
   initReload: 0,

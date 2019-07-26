@@ -6,18 +6,21 @@ import TableRow from '@material-ui/core/TableRow';
 import { Book, DeleteOutline } from '@material-ui/icons';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import { connect } from 'react-redux';
 
 import http from '../../http.service';
 import { IDataPreparedForTable } from './books-list.model';
-
+import { appLoading } from '../../react-redux/redux';
 
 interface IProps {
   data: IDataPreparedForTable[];
   openAlert: (arg0: boolean) => void;
   closeAlert: (arg0: boolean) => void;
+  appLoading: (arg0: boolean) => void;
 }
 
-const SingleBookRecord = ({ data, openAlert, closeAlert }: IProps) => {
+const SingleBookRecord = (props: IProps) => {
+  const { data, openAlert, closeAlert } = props;
   const deleteBook = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const IDOfBook = event.currentTarget.id;
 
@@ -48,7 +51,7 @@ const SingleBookRecord = ({ data, openAlert, closeAlert }: IProps) => {
             <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
               <div style={{ display: 'flex' }}>
                 <span>
-                  <Link to={val.id}>
+                  <Link onClick={() => props.appLoading(true)} to={val.id}>
                     <Tooltip title="Show details">
                       <IconButton aria-label="Show" color="primary">
                         <Book />
@@ -77,4 +80,15 @@ const SingleBookRecord = ({ data, openAlert, closeAlert }: IProps) => {
   );
 };
 
-export default SingleBookRecord;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    appLoading: (boo: boolean) => dispatch(appLoading(boo)),
+  };
+};
+
+const Component = connect(
+  undefined,
+  mapDispatchToProps,
+)(SingleBookRecord);
+
+export default Component;

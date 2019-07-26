@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -17,7 +17,7 @@ import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
 import { BookApiCollection, BookApiItem } from '../../domainModel';
 import { IDataPreparedForTable } from './books-list.model';
-import { IStore, setEditorOpen } from '../../react-redux/redux';
+import { IStore, setEditorOpen, appLoading } from '../../react-redux/redux';
 
 const useStyles = makeStyles({
   close: {
@@ -41,6 +41,7 @@ const useStyles = makeStyles({
 interface IProps {
   initReload: any;
   setEditorOpen: any;
+  appLoading: any;
 }
 
 const BooksList = (props: IProps & IStore) => {
@@ -66,11 +67,13 @@ const BooksList = (props: IProps & IStore) => {
       .then(result => {
         setListOfBooks(result.data.data);
         setTotalItems(result.data.meta.totalItems);
+        props.appLoading(false);
       })
       .catch(error => console.error(error));
   };
 
   useEffect(() => {
+    props.appLoading(true);
     callForBooks('/books', pageNumber);
   }, [pageNumber, initReload]);
 
@@ -206,6 +209,7 @@ const mapStateToProps = (store: IStore) => ({
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
+    appLoading: (boo: boolean) => dispatch(appLoading(boo)),
     setEditorOpen: (boo: boolean) => dispatch(setEditorOpen(boo)),
   };
 };
