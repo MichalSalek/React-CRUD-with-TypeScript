@@ -130,7 +130,11 @@ const HeadingBarNewReview = (props: IProps) => {
       .then(() => {
         setSubmitting(true);
         handleOpenSuccessAlert();
+        // Trick to init rerender list of reviews:
         props.initReload(Math.random());
+        setReviewBodyState('');
+        setAuthorState('');
+        setRatingState(0);
       })
       .catch(error => {
         console.error(error);
