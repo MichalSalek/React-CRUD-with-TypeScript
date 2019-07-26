@@ -13,9 +13,11 @@ import { Formik } from 'formik';
 import Snackbar from '@material-ui/core/Snackbar';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
+import { connect } from 'react-redux';
 
 import dateConverter from '../../common/date-converter';
 import http from '../../../http.service';
+import { initReload } from '../../../react-redux/redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,6 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface IProps {
   url: string;
+  initReload: (arg0: number) => void;
 }
 
 const HeadingBarNewReview = (props: IProps) => {
@@ -127,6 +130,7 @@ const HeadingBarNewReview = (props: IProps) => {
       .then(() => {
         setSubmitting(true);
         handleOpenSuccessAlert();
+        props.initReload(Math.random());
       })
       .catch(error => {
         console.error(error);
@@ -268,4 +272,15 @@ const HeadingBarNewReview = (props: IProps) => {
   );
 };
 
-export default HeadingBarNewReview;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    initReload: (number: number) => dispatch(initReload(number)),
+  };
+};
+
+const Component = connect(
+  undefined,
+  mapDispatchToProps,
+)(HeadingBarNewReview);
+
+export default Component;

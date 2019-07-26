@@ -19,6 +19,8 @@ import SingleReviewRecord from './single-review-record';
 import { ReviewApiCollection, ReviewApiItem } from '../../../domainModel';
 import { IDataPreparedForTable } from './reviews.model';
 import dateConverter from '../../common/date-converter';
+import { IStore, setCurrentTitle, setEditorOpen } from '../../../react-redux/redux';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles({
   close: {
@@ -38,9 +40,14 @@ const useStyles = makeStyles({
   },
 });
 
-const ReviewsComponent = (props: any) => {
+interface IProps {
+  bookID: string;
+  initReload: number;
+}
+
+const ReviewsComponent = (props: IProps) => {
   const classes = useStyles();
-  const { bookID } = props;
+  const { bookID, initReload } = props;
 
   const [callResolve, setCallResolve] = useState(false);
 
@@ -134,7 +141,7 @@ const ReviewsComponent = (props: any) => {
 
   useEffect(() => {
     callForReviewsBundle(bookID);
-  }, [bookID]);
+  }, [bookID, initReload]);
 
   return (
     <React.Fragment>
@@ -241,4 +248,13 @@ const ReviewsComponent = (props: any) => {
   );
 };
 
-export default ReviewsComponent;
+const mapStateToProps = (store: IStore) => ({
+  initReload: store.initReload,
+});
+
+const Component = connect(
+  mapStateToProps,
+  undefined,
+)(ReviewsComponent);
+
+export default Component;

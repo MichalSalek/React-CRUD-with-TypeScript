@@ -16,6 +16,14 @@ export const setCurrentTitle = (title: string) => {
   };
 };
 
+export const initReload = (num: number) => {
+  const init = num + 1;
+  return {
+    init,
+    type: 'INIT_RELOAD',
+  };
+};
+
 // REDUCER
 
 export const reducer = (store: any = {}, action: any): IStore => {
@@ -30,6 +38,11 @@ export const reducer = (store: any = {}, action: any): IStore => {
         ...store,
         currentTitle: action.title,
       };
+    case 'INIT_RELOAD':
+      return {
+        ...store,
+        initReload: action.init,
+      };
     default:
       return store;
   }
@@ -40,11 +53,13 @@ export const reducer = (store: any = {}, action: any): IStore => {
 export interface IStore extends DeepPartial<IStore> {
   readonly editorIsOpen: boolean;
   readonly currentTitle: string;
+  readonly initReload: number;
 }
 
 const storeInitialization: IStore = {
   currentTitle: '',
   editorIsOpen: false,
+  initReload: 0,
 };
 
 const redux = createStore(reducer, storeInitialization);
