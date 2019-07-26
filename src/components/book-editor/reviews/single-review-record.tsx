@@ -9,7 +9,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 
-import http from '../../http.service';
+import http from '../../../http.service';
 import { IDataPreparedForTable } from './reviews.model';
 
 interface IProps {

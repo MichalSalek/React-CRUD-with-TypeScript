@@ -34,7 +34,7 @@ function App() {
       <Header />
       <Paper className={classes.appPaper}>
         <Router>
-          <AppBodyHeadingBar styles={classes.appBodyHeadingBar} />
+          <AppBodyHeadingBar />
           <Route exact path="/" component={BooksList} />
           <Route path="/books/:bookID" component={BookEditor} />
         </Router>

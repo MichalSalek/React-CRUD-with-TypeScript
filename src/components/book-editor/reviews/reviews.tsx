@@ -14,11 +14,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
 
-import http from '../../http.service';
+import http from '../../../http.service';
 import SingleReviewRecord from './single-review-record';
-import { ReviewApiCollection, ReviewApiItem } from '../../domainModel';
+import { ReviewApiCollection, ReviewApiItem } from '../../../domainModel';
 import { IDataPreparedForTable } from './reviews.model';
-import dateConverter from '../common/date-converter';
+import dateConverter from '../../common/date-converter';
 
 const useStyles = makeStyles({
   close: {

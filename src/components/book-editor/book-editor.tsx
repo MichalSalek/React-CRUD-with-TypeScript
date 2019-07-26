@@ -14,7 +14,8 @@ import { setEditorOpen, setCurrentTitle, IStore } from '../../react-redux/redux'
 import dateConverter from '../common/date-converter';
 import http from '../../http.service';
 import compareChecksum from './checksum-comparision';
-import ReviewsComponent from '../reviews/reviews';
+import ReviewsComponent from './reviews/reviews';
+import HeadingBar from '../app-body-heading-bar/app-body-heading-bar';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -328,6 +329,7 @@ const BookEditor = (props: any) => {
           </Tooltip>,
         ]}
       />
+      <HeadingBar />
       <ReviewsComponent bookID={url} />
     </React.Fragment>
   );
