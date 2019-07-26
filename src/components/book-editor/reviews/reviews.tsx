@@ -69,8 +69,10 @@ const ReviewsComponent = (props: any) => {
   };
 
   const callForReviewsBundle = (BookID: string) => {
+    const cleanBookID = BookID.replace(/^\D+/g, '');
+    const query = `book=${cleanBookID}`;
     http
-      .get(`/reviews`, BookID)
+      .get(`/reviews`, query)
       .then(result => {
         const statusOfResponse = result.status;
         if (statusOfResponse !== 200) {
