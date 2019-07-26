@@ -124,7 +124,7 @@ const ReviewsComponent = (props: any) => {
           ),
         );
       });
-      setArrangedData(helperArrangedData);
+      setArrangedData(helperArrangedData.reverse());
     };
 
     arrangeDataForRender(listOfReviews);

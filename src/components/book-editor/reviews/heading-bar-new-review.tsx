@@ -169,6 +169,7 @@ const HeadingBarNewReview = (props: IProps) => {
                   <TextField
                     id="review-body"
                     label="Review"
+                    multiline
                     className={classes.textField}
                     placeholder="Enter your review here."
                     fullWidth
