@@ -14,10 +14,9 @@ import Button from '@material-ui/core/Button';
 import { Formik } from 'formik';
 import Snackbar from '@material-ui/core/Snackbar';
 
-import { IStore } from '../../react-redux/redux';
+import { initReload, IStore } from '../../react-redux/redux';
 import dateConverter from '../common/date-converter';
 import validateISBN from '../common/validate-isbn';
-import compareChecksum from '../book-editor/checksum-comparision';
 import http from '../../http.service';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -60,7 +59,11 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-const AppBodyHeadingBarNewBook = (props: IStore) => {
+interface IProps extends IStore {
+  initReload: any;
+}
+
+const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
   const classes = useStyles();
   const { editorIsOpen, currentTitle } = props;
   const [editorMode, setEditorMode] = useState(false);
@@ -115,11 +118,32 @@ const AppBodyHeadingBarNewBook = (props: IStore) => {
     }
     return null;
   };
+
+  useEffect(() => {
+    const formValidation = () => {
+      switch (true) {
+        case titleState === '':
+          return true;
+        case ISBNState === '':
+          return true;
+        case descriptionState === '':
+          return true;
+        case authorState === '':
+          return true;
+        default:
+          return false;
+      }
+    };
+
+    setSubmitting(formValidation());
+  }, [titleState, ISBNState, descriptionState, authorState]);
+
   useEffect(() => {
     if (ISBNInvalid) {
       setSubmitting(true);
     }
   }, [ISBNInvalid]);
+
   const sendNewBook = () => {
     const data = {
       author: authorState,
@@ -134,6 +158,11 @@ const AppBodyHeadingBarNewBook = (props: IStore) => {
       .then(() => {
         setSubmitting(true);
         handleOpenSuccessAlert();
+        props.initReload(Math.random());
+        setTitleState('');
+        setISBNState('');
+        setDescriptionState('');
+        setAuthorState('');
       })
       .catch(error => {
         console.error(error);
@@ -168,13 +197,15 @@ const AppBodyHeadingBarNewBook = (props: IStore) => {
           <div className={classes.root}>
             <ExpansionPanel>
               <ExpansionPanelSummary
-                expandIcon={<Edit />}
+                expandIcon={
+                  <Tooltip title="Add a book">
+                    <Edit />
+                  </Tooltip>
+                }
                 aria-controls="new-review"
                 id="new-review"
               >
-                <Typography variant="h5">
-                  Books
-                </Typography>
+                <Typography variant="h5">Books</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <Formik
@@ -276,7 +307,7 @@ const AppBodyHeadingBarNewBook = (props: IStore) => {
             open={openSuccessAlert}
             autoHideDuration={6000}
             onClose={handleCloseAlert}
-            message={<span id="message-id">Your review has been added!</span>}
+            message={<span id="message-id">Book has been added!</span>}
             action={[
               <Tooltip key="close1" title="Close">
                 <IconButton
@@ -329,9 +360,15 @@ const mapStateToProps = (store: IStore) => ({
   editorIsOpen: store.editorIsOpen,
 });
 
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    initReload: (number: number) => dispatch(initReload(number)),
+  };
+};
+
 const Component = connect(
   mapStateToProps,
-  undefined,
+  mapDispatchToProps,
 )(AppBodyHeadingBarNewBook);
 
 export default Component;

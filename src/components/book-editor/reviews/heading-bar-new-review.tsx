@@ -153,7 +153,15 @@ const HeadingBarNewReview = (props: IProps) => {
     <section className={classes.headingBar}>
       <div className={classes.root}>
         <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<Edit />} aria-controls="new-review" id="new-review">
+          <ExpansionPanelSummary
+            expandIcon={
+              <Tooltip title="Add a review">
+                <Edit />
+              </Tooltip>
+            }
+            aria-controls="new-review"
+            id="new-review"
+          >
             <Typography className={classes.headingText} variant="h6">
               Book&apos;s reviews
             </Typography>

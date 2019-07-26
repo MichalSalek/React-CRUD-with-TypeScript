@@ -17,7 +17,7 @@ import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
 import { BookApiCollection, BookApiItem } from '../../domainModel';
 import { IDataPreparedForTable } from './books-list.model';
-import { setEditorOpen } from '../../react-redux/redux';
+import { IStore, setEditorOpen } from '../../react-redux/redux';
 
 const useStyles = makeStyles({
   close: {
@@ -26,7 +26,6 @@ const useStyles = makeStyles({
   },
   headerCell: {
     fontSize: '0.8rem',
-    fontWeight: 'bold',
     letterSpacing: '0.07rem',
   },
   tableHead: {
@@ -39,7 +38,13 @@ const useStyles = makeStyles({
   },
 });
 
-const BooksList: FunctionComponent = (props: any) => {
+interface IProps {
+  initReload: any;
+  setEditorOpen: any;
+}
+
+const BooksList = (props: IProps & IStore) => {
+  const { initReload } = props;
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openError, setOpenError] = useState(false);
 
@@ -67,7 +72,7 @@ const BooksList: FunctionComponent = (props: any) => {
 
   useEffect(() => {
     callForBooks('/books', pageNumber);
-  }, [pageNumber]);
+  }, [pageNumber, initReload]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
@@ -88,7 +93,7 @@ const BooksList: FunctionComponent = (props: any) => {
           createRow(val.id, val.attributes.isbn, val.attributes.title, val.attributes.author),
         );
       });
-      setArrangedData(helperArrangedData);
+      setArrangedData(helperArrangedData.reverse());
     };
 
     arrangeDataForRender(listOfBooks);
@@ -195,14 +200,18 @@ const BooksList: FunctionComponent = (props: any) => {
   );
 };
 
+const mapStateToProps = (store: IStore) => ({
+  initReload: store.initReload,
+});
+
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    setEditorOpen: (boo: any) => dispatch(setEditorOpen(boo)),
+    setEditorOpen: (boo: boolean) => dispatch(setEditorOpen(boo)),
   };
 };
 
 const Component = connect(
-  undefined,
+  mapStateToProps,
   mapDispatchToProps,
 )(BooksList);
 
