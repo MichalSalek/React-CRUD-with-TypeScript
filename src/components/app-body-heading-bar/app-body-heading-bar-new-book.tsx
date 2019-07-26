@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-const AppBodyHeadingBar = (props: IStore) => {
+const AppBodyHeadingBarNewBook = (props: IStore) => {
   const classes = useStyles();
   const { editorIsOpen, currentTitle } = props;
   const [editorMode, setEditorMode] = useState(false);
@@ -29,6 +29,10 @@ const AppBodyHeadingBar = (props: IStore) => {
       setEditorMode(editorIsOpen);
     }, 300);
   }, [editorIsOpen]);
+
+  const createNewBook = () => {
+    console.log('Create new book.');
+  };
 
   return (
     <section className={classes.appBodyHeadingBar}>
@@ -45,7 +49,7 @@ const AppBodyHeadingBar = (props: IStore) => {
         </Link>
       ) : (
         <Tooltip title="Create">
-          <IconButton aria-label="Create" color="primary">
+          <IconButton aria-label="Create" color="primary" onClick={createNewBook}>
             <Edit />
           </IconButton>
         </Tooltip>
@@ -62,6 +66,6 @@ const mapStateToProps = (store: IStore) => ({
 const Component = connect(
   mapStateToProps,
   undefined,
-)(AppBodyHeadingBar);
+)(AppBodyHeadingBarNewBook);
 
 export default Component;

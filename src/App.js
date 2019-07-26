@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Header from './components/common/header-bar/header-bar';
-import AppBodyHeadingBar from './components/app-body-heading-bar/app-body-heading-bar';
+import AppBodyHeadingBar from './components/app-body-heading-bar/app-body-heading-bar-new-book';
 import BooksList from './components/books-list/books-list';
 import BookEditor from './components/book-editor/book-editor';
 import ScrollToTopIcon from './components/scroll-to-top-icon/scroll-to-top-icon';
