@@ -21,7 +21,7 @@ const ScrollToTopIcon = () => {
   };
   return (
     <Fab variant="extended" aria-label="Scroll to top" className={classes.fab}>
-      <NavigationIcon onClick={scrollToTop} />
+      <NavigationIcon color="primary" onClick={scrollToTop} />
     </Fab>
   );
 };
