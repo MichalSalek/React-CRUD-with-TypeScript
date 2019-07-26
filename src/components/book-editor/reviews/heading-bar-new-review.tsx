@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { Close, Edit } from '@material-ui/icons';
@@ -63,7 +63,7 @@ const HeadingBarNewReview = (props: IProps) => {
   const [authorState, setAuthorState] = useState('');
   const [ratingState, setRatingState] = useState(0);
 
-  const [submitting, setSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(true);
 
   const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
   const [openErrorAlert, setOpenErrorAlert] = useState(false);
@@ -96,6 +96,23 @@ const HeadingBarNewReview = (props: IProps) => {
     }
     return null;
   };
+
+  useEffect(() => {
+    const formValidation = () => {
+      switch (true) {
+        case reviewBodyState === '':
+          return true;
+        case authorState === '':
+          return true;
+        case ratingState <= 0 || ratingState >= 6:
+          return true;
+        default:
+          return false;
+      }
+    };
+
+    setSubmitting(formValidation());
+  }, [reviewBodyState, authorState, ratingState]);
 
   const postNewReview = () => {
     const data = {
@@ -134,19 +151,7 @@ const HeadingBarNewReview = (props: IProps) => {
             </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <Formik
-              initialValues={{ title: '' }}
-              validate={values => {
-                const errors = {
-                  title: '',
-                };
-                if (!values.title) {
-                  errors.title = 'Required';
-                }
-                return errors;
-              }}
-              onSubmit={e => handleSubmit(e)}
-            >
+            <Formik initialValues={{ title: '' }} onSubmit={e => handleSubmit(e)}>
               {() => (
                 <form
                   className={classes.container}
