@@ -16,6 +16,7 @@ import http from '../../http.service';
 import compareChecksum from './checksum-comparision';
 import ReviewsComponent from './reviews/reviews';
 import HeadingBarNewReview from './reviews/heading-bar-new-review';
+import validateISBN from '../common/validate-isbn';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,6 +46,7 @@ const BookEditor = (props: any) => {
   const [callResolve, setCallResolve] = useState(false);
   const [titleState, setTitleState] = useState('Loading...');
   const [ISBNState, setISBNState] = useState('Loading...');
+  const [ISBNInvalid, setISBNInvalid] = useState(false);
   const [descriptionState, setDescriptionState] = useState('Loading...');
   const [authorState, setAuthorState] = useState('Loading...');
   const [publicationDateState, setPublicationDateState] = useState('Loading...');
@@ -119,6 +121,7 @@ const BookEditor = (props: any) => {
         setTitleState(e.currentTarget.value);
         break;
       case 'book-isbn':
+        setISBNInvalid(!validateISBN(e.currentTarget.value));
         setISBNState(e.currentTarget.value);
         break;
       case 'book-description':
@@ -144,7 +147,11 @@ const BookEditor = (props: any) => {
   }, [titleState, ISBNState, descriptionState, authorState, publicationDateState]);
 
   useEffect(() => {
-    setSubmitting(compareChecksum(checksumString, newValuesString));
+    if (!ISBNInvalid) {
+      setSubmitting(compareChecksum(checksumString, newValuesString));
+    } else {
+      setSubmitting(true);
+    }
   }, [checksumString, newValuesString]);
 
   const putNewDataToThisBook = (path: string) => {
@@ -210,8 +217,12 @@ const BookEditor = (props: any) => {
                 value={titleState}
               />
               <TextField
+                error={ISBNInvalid}
+                helperText={
+                  ISBNInvalid ? 'This value is neither a valid ISBN-10 nor a valid ISBN-13.' : ''
+                }
                 id="book-isbn"
-                label="ISBN"
+                label={ISBNInvalid ? 'Error' : 'ISBN'}
                 className={classes.textField}
                 placeholder="Enter isbn number."
                 fullWidth
