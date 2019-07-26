@@ -35,42 +35,44 @@ const SingleReviewRecord = ({ data, openAlert, closeAlert, rowsPerPage, pageNumb
   };
   return (
     <React.Fragment>
-      {data.slice(pageNumber, pageNumber + rowsPerPage).map((val, index: number) => {
-        return (
-          <TableRow key={String(val.reviewBody) + String(index)}>
-            <TableCell component="th" scope="row" style={{ width: '80%' }}>
-              {val.reviewBody}
-            </TableCell>
-            <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
-              <Box component="fieldset" mb={0} p={0} borderColor="transparent">
-                <Rating value={val.rating} readOnly />
-              </Box>
-            </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '20%' }}>
-              {val.author}
-            </TableCell>
-            <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
-              {val.reviewDate}
-            </TableCell>
-            <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
-              <div style={{ display: 'flex' }}>
-                <span>
-                  <Tooltip title="Delete book">
-                    <IconButton
-                      id={val.id}
-                      onClick={deleteReview}
-                      aria-label="Delete book"
-                      color="primary"
-                    >
-                      <DeleteOutline />
-                    </IconButton>
-                  </Tooltip>
-                </span>
-              </div>
-            </TableCell>
-          </TableRow>
-        );
-      })}
+      {data
+        .slice(pageNumber * rowsPerPage, pageNumber * rowsPerPage + rowsPerPage)
+        .map((val, index: number) => {
+          return (
+            <TableRow key={String(val.reviewBody) + String(index)}>
+              <TableCell component="th" scope="row" style={{ width: '80%' }}>
+                {val.reviewBody}
+              </TableCell>
+              <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
+                <Box component="fieldset" mb={0} p={0} borderColor="transparent">
+                  <Rating value={val.rating} readOnly />
+                </Box>
+              </TableCell>
+              <TableCell component="th" scope="row" style={{ width: '20%' }}>
+                {val.author}
+              </TableCell>
+              <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
+                {val.reviewDate}
+              </TableCell>
+              <TableCell component="th" scope="row" style={{ width: 'fit-content' }}>
+                <div style={{ display: 'flex' }}>
+                  <span>
+                    <Tooltip title="Delete book">
+                      <IconButton
+                        id={val.id}
+                        onClick={deleteReview}
+                        aria-label="Delete book"
+                        color="primary"
+                      >
+                        <DeleteOutline />
+                      </IconButton>
+                    </Tooltip>
+                  </span>
+                </div>
+              </TableCell>
+            </TableRow>
+          );
+        })}
     </React.Fragment>
   );
 };
