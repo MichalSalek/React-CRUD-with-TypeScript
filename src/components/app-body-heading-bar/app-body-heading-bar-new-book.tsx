@@ -166,8 +166,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
         setAuthorState('');
         props.appLoading(false);
       })
-      .catch(error => {
-        console.error(error);
+      .catch(() => {
         setSubmitting(false);
         handleOpenErrorAlert();
       });
@@ -308,7 +307,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
               'aria-describedby': 'message-id',
             }}
             open={openSuccessAlert}
-            autoHideDuration={6000}
+            autoHideDuration={2200}
             onClose={handleCloseAlert}
             message={<span id="message-id">Book has been added!</span>}
             action={[
@@ -335,7 +334,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
               'aria-describedby': 'message-id',
             }}
             open={openErrorAlert}
-            autoHideDuration={6000}
+            autoHideDuration={2200}
             onClose={handleCloseAlert}
             message={<span id="message-id">Something went wrong...</span>}
             action={[

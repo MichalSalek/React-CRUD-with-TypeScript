@@ -23,7 +23,6 @@ const Header = (props: IStore) => {
   return (
     <div className={classes.root}>
       <AppBar>
-        {appLoading && <LinearProgress color="secondary" variant="query" />}
         <Toolbar>
           <Typography variant="h6" color="inherit">
             Books App (Michał Sałek)
@@ -38,6 +37,7 @@ const Header = (props: IStore) => {
             </IconButton>{' '}
           </a>
         </Toolbar>
+        {appLoading && <LinearProgress color="secondary" variant="query" />}
       </AppBar>
     </div>
   );

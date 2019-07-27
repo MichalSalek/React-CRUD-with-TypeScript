@@ -239,7 +239,7 @@ const HeadingBarNewReview = (props: IProps) => {
           'aria-describedby': 'message-id',
         }}
         open={openSuccessAlert}
-        autoHideDuration={6000}
+        autoHideDuration={2200}
         onClose={handleCloseAlert}
         message={<span id="message-id">Your review has been added!</span>}
         action={[
@@ -266,7 +266,7 @@ const HeadingBarNewReview = (props: IProps) => {
           'aria-describedby': 'message-id',
         }}
         open={openErrorAlert}
-        autoHideDuration={6000}
+        autoHideDuration={2200}
         onClose={handleCloseAlert}
         message={<span id="message-id">Something went wrong...</span>}
         action={[

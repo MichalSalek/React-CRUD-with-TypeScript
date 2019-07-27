@@ -160,7 +160,7 @@ const BookEditor = (props: IProps) => {
     } else {
       setSubmitting(true);
     }
-  }, [checksumString, newValuesString]);
+  }, [checksumString, newValuesString, ISBNInvalid]);
 
   const putNewDataToThisBook = (path: string) => {
     const data = {
@@ -306,7 +306,7 @@ const BookEditor = (props: IProps) => {
           'aria-describedby': 'message-id',
         }}
         open={openSuccessAlert}
-        autoHideDuration={6000}
+        autoHideDuration={2200}
         onClose={handleCloseAlert}
         message={<span id="message-id">Book information has been updated!</span>}
         action={[
@@ -333,7 +333,7 @@ const BookEditor = (props: IProps) => {
           'aria-describedby': 'message-id',
         }}
         open={openErrorAlert}
-        autoHideDuration={6000}
+        autoHideDuration={2200}
         onClose={handleCloseAlert}
         message={<span id="message-id">Something went wrong with the update.</span>}
         action={[

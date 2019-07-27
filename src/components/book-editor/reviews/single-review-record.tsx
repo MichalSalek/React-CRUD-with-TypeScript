@@ -8,25 +8,30 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
+import { connect } from 'react-redux';
 
 import http from '../../../http.service';
 import { IDataPreparedForTable } from './reviews.model';
+import { initReload } from '../../../react-redux/redux';
 
 interface IProps {
   data: IDataPreparedForTable[];
   openAlert: (arg0: boolean) => void;
   closeAlert: (arg0: boolean) => void;
+  initReload: any;
   rowsPerPage: number;
   pageNumber: number;
 }
 
-const SingleReviewRecord = ({ data, openAlert, closeAlert, rowsPerPage, pageNumber }: IProps) => {
+const SingleReviewRecord = (props: IProps) => {
+  const { data, openAlert, closeAlert, rowsPerPage, pageNumber } = props;
   const deleteReview = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     const IDOfReview = event.currentTarget.id;
     http
       .delete(String(IDOfReview))
       .then(result => {
         if (result.status === 204) openAlert(true);
+        props.initReload(Math.random());
       })
       .catch(error => {
         console.error(error);
@@ -77,4 +82,15 @@ const SingleReviewRecord = ({ data, openAlert, closeAlert, rowsPerPage, pageNumb
   );
 };
 
-export default SingleReviewRecord;
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    initReload: (number: number) => dispatch(initReload(number)),
+  };
+};
+
+const Component = connect(
+  undefined,
+  mapDispatchToProps,
+)(SingleReviewRecord);
+
+export default Component;

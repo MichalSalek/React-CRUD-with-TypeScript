@@ -38,7 +38,7 @@ function App() {
           <Route exact path="/" component={BooksList} />
           <Route path="/books/:bookID" component={BookEditor} />
         </Router>
-        <ScrollToTopIcon/>
+        <ScrollToTopIcon />
       </Paper>
     </main>
   );

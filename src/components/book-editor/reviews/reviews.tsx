@@ -22,7 +22,6 @@ import { IDataPreparedForTable } from './reviews.model';
 import dateConverter from '../../common/date-converter';
 import { IStore } from '../../../react-redux/redux';
 
-
 const useStyles = makeStyles({
   close: {
     background: '#111',
@@ -200,7 +199,7 @@ const ReviewsComponent = (props: IProps) => {
             'aria-describedby': 'message-id',
           }}
           open={openSuccess}
-          autoHideDuration={6000}
+          autoHideDuration={2200}
           onClose={handleClose}
           message={<span id="message-id">Review removed by anonymous user :-).</span>}
           action={[
@@ -227,7 +226,7 @@ const ReviewsComponent = (props: IProps) => {
             'aria-describedby': 'message-id',
           }}
           open={openError}
-          autoHideDuration={6000}
+          autoHideDuration={2200}
           onClose={handleClose}
           message={<span id="message-id">Something went wrong with removal.</span>}
           action={[

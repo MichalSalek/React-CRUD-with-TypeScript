@@ -12,7 +12,7 @@ import { withStyles, Theme } from '@material-ui/core/styles';
 
 import http from '../../http.service';
 import { IDataPreparedForTable } from './books-list.model';
-import { appLoading } from '../../react-redux/redux';
+import { appLoading, initReload } from '../../react-redux/redux';
 
 const StyledBadge = withStyles((theme: Theme) => ({
   badge: {
@@ -29,6 +29,7 @@ interface IProps {
   openAlert: (arg0: boolean) => void;
   closeAlert: (arg0: boolean) => void;
   appLoading: (arg0: boolean) => void;
+  initReload: (arg0: number) => void;
 }
 
 const SingleBookRecord = (props: IProps) => {
@@ -39,7 +40,10 @@ const SingleBookRecord = (props: IProps) => {
     http
       .delete(String(IDOfBook))
       .then(result => {
-        if (result.status === 204) openAlert(true);
+        if (result.status === 204) {
+          openAlert(true);
+          props.initReload(Math.random());
+        }
       })
       .catch(error => {
         console.error(error);
@@ -66,7 +70,7 @@ const SingleBookRecord = (props: IProps) => {
                   <Link onClick={() => props.appLoading(true)} to={val.id}>
                     <Tooltip title="Show details">
                       <IconButton aria-label="Show" color="primary">
-                        <StyledBadge badgeContent={val.reviewsAmount} color="inherit">
+                        <StyledBadge badgeContent={val.reviewsAmount} color="default">
                           <Book />
                         </StyledBadge>
                       </IconButton>
@@ -97,6 +101,7 @@ const SingleBookRecord = (props: IProps) => {
 const mapDispatchToProps = (dispatch: any) => {
   return {
     appLoading: (boo: boolean) => dispatch(appLoading(boo)),
+    initReload: (number: number) => dispatch(initReload(number)),
   };
 };
 

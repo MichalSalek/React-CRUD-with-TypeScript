@@ -64,6 +64,7 @@ const BooksList = (props: IProps & IStore) => {
   const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>([]);
 
   const callForBooks = (path: string, page: number) => {
+    props.appLoading(true);
     http
       .get(path, `page=${page + 1}`)
       .then(result => {
@@ -76,9 +77,15 @@ const BooksList = (props: IProps & IStore) => {
   };
 
   useEffect(() => {
-    props.appLoading(true);
     callForBooks('/books', pageNumber);
-  }, [pageNumber, initReload]);
+  }, [pageNumber, initReload, props]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      callForBooks('/books', pageNumber);
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [pageNumber]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null,
@@ -182,7 +189,7 @@ const BooksList = (props: IProps & IStore) => {
           'aria-describedby': 'message-id',
         }}
         open={openSuccess}
-        autoHideDuration={6000}
+        autoHideDuration={2200}
         onClose={handleClose}
         message={<span id="message-id">Book deleted!</span>}
         action={[
@@ -209,7 +216,7 @@ const BooksList = (props: IProps & IStore) => {
           'aria-describedby': 'message-id',
         }}
         open={openError}
-        autoHideDuration={6000}
+        autoHideDuration={2200}
         onClose={handleClose}
         message={<span id="message-id">OH NO! We could not delete the book.</span>}
         action={[
