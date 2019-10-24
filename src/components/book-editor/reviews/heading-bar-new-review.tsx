@@ -1,3 +1,4 @@
+// node_modules
 import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,9 +16,9 @@ import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 
-import dateConverter from '../../common/date-converter';
+import dateConverter from '../../../common/plugins/date-converter';
 import http from '../../../http.service';
-import { appLoading, initReload } from '../../../react-redux/redux';
+import { appLoading, initReload } from '../../../common/redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

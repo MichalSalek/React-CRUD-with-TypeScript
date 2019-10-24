@@ -1,6 +1,6 @@
+// node_modules
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { Book, DeleteOutline } from '@material-ui/icons';
@@ -12,7 +12,7 @@ import { withStyles, Theme } from '@material-ui/core/styles';
 
 import http from '../../http.service';
 import { IDataPreparedForTable } from './books-list.model';
-import { appLoading, initReload } from '../../react-redux/redux';
+import { appLoading, initReload } from '../../common/redux';
 
 const StyledBadge = withStyles((theme: Theme) => ({
   badge: {

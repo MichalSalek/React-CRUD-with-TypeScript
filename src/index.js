@@ -1,3 +1,4 @@
+// node_modules
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -5,7 +6,7 @@ import { Provider } from 'react-redux';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './styles-map';
-import store from './react-redux/redux';
+import store from './common/redux';
 
 ReactDOM.render(
   <Provider store={store}>

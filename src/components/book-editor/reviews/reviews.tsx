@@ -1,5 +1,5 @@
+// node_modules
 import React, { useEffect, useState } from 'react';
-
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -19,8 +19,8 @@ import http from '../../../http.service';
 import SingleReviewRecord from './single-review-record';
 import { ReviewApiCollection, ReviewApiItem } from '../../../domainModel';
 import { IDataPreparedForTable } from './reviews.model';
-import dateConverter from '../../common/date-converter';
-import { IStore } from '../../../react-redux/redux';
+import dateConverter from '../../../common/plugins/date-converter';
+import { IStore } from '../../../common/redux';
 
 const useStyles = makeStyles({
   close: {

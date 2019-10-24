@@ -1,6 +1,5 @@
+// node_modules
 import React from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { BrowserRouter as Router, Link } from 'react-router-dom';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import { DeleteOutline } from '@material-ui/icons';
@@ -12,7 +11,7 @@ import { connect } from 'react-redux';
 
 import http from '../../../http.service';
 import { IDataPreparedForTable } from './reviews.model';
-import { initReload } from '../../../react-redux/redux';
+import { initReload } from '../../../common/redux';
 
 interface IProps {
   data: IDataPreparedForTable[];

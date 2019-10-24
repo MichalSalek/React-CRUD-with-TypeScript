@@ -1,3 +1,4 @@
+// node_modules
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
@@ -18,7 +19,7 @@ import SingleBookRecord from './single-book-record';
 import http from '../../http.service';
 import { BookApiCollection, BookApiItem } from '../../domainModel';
 import { IDataPreparedForTable } from './books-list.model';
-import { IStore, setEditorOpen, appLoading } from '../../react-redux/redux';
+import { IStore, setEditorOpen, appLoading } from '../../common/redux';
 
 const useStyles = makeStyles({
   close: {

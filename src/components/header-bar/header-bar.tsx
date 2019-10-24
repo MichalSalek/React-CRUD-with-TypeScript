@@ -1,3 +1,4 @@
+// node_modules
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,7 +9,7 @@ import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import { Message } from '@material-ui/icons';
 
-import { IStore } from '../../../react-redux/redux';
+import { IStore } from '../../common/redux';
 
 const useStyles = makeStyles({
   root: {

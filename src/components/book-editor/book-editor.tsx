@@ -1,3 +1,4 @@
+// node_modules
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
@@ -10,13 +11,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
 
-import { setEditorOpen, setCurrentTitle, IStore, appLoading } from '../../react-redux/redux';
-import dateConverter from '../common/date-converter';
+import { setEditorOpen, setCurrentTitle, IStore, appLoading } from '../../common/redux';
+import dateConverter from '../../common/plugins/date-converter';
 import http from '../../http.service';
-import compareChecksum from './checksum-comparision';
+import compareChecksum from '../../common/plugins/checksum-comparision';
 import ReviewsComponent from './reviews/reviews';
 import HeadingBarNewReview from './reviews/heading-bar-new-review';
-import validateISBN from '../common/validate-isbn';
+import validateISBN from '../../common/plugins/validate-isbn';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
