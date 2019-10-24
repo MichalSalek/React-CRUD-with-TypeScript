@@ -9,9 +9,9 @@ import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 
-import http from '../../../http.service';
-import { IDataPreparedForTable } from './reviews.model';
-import { initReload } from '../../../common/redux';
+import http from '../../http.service';
+import { IDataPreparedForTable } from '../reviews-table/reviews-table.model';
+import { initReload } from '../../common/redux';
 
 interface IProps {
   data: IDataPreparedForTable[];

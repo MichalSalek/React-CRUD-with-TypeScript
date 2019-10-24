@@ -1,7 +1,6 @@
 // node_modules
 import React, { useEffect, useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { makeStyles } from '@material-ui/core';
 import Snackbar from '@material-ui/core/Snackbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,30 +14,15 @@ import TableBody from '@material-ui/core/TableBody';
 import Table from '@material-ui/core/Table';
 import { connect } from 'react-redux';
 
-import http from '../../../http.service';
-import SingleReviewRecord from './single-review-record';
-import { ReviewApiCollection, ReviewApiItem } from '../../../domainModel';
-import { IDataPreparedForTable } from './reviews.model';
-import dateConverter from '../../../common/plugins/date-converter';
-import { IStore } from '../../../common/redux';
+import http from '../../http.service';
+import SingleReviewRecord from '../single-review-record/single-review-record';
+import { ReviewApiCollection, ReviewApiItem } from '../../domainModel';
+import { IDataPreparedForTable } from './reviews-table.model';
+import dateConverter from '../../common/plugins/date-converter';
+import { IStore } from '../../common/redux';
 
-const useStyles = makeStyles({
-  close: {
-    background: '#111',
-    margin: '0.5rem',
-  },
-  headerCell: {
-    fontSize: '0.8rem',
-  },
-  tableHead: {
-    background: '#fafafa',
-    borderTop: '1px solid #ddd',
-    boxShadow: '0px 5px 8px -3px rgba(0,0,0,0.1)',
-    position: 'sticky',
-    top: '60px',
-    zIndex: 10,
-  },
-});
+// Style
+import { reviewsStyle } from './reviews.style';
 
 interface IProps {
   bookID: string;
@@ -46,7 +30,7 @@ interface IProps {
 }
 
 const ReviewsComponent = (props: IProps) => {
-  const classes = useStyles();
+  const s = reviewsStyle();
   const { bookID, initReload } = props;
 
   const [callResolve, setCallResolve] = useState(false);
@@ -147,8 +131,8 @@ const ReviewsComponent = (props: IProps) => {
     <React.Fragment>
       {callResolve ? (
         <Table>
-          <TableHead className={classes.tableHead}>
-            <TableRow className={classes.headerCell}>
+          <TableHead className={s.tableHead}>
+            <TableRow className={s.headerCell}>
               <TableCell>Review: </TableCell>
               <TableCell>Rating: </TableCell>
               <TableCell>Author: </TableCell>
@@ -208,7 +192,7 @@ const ReviewsComponent = (props: IProps) => {
                 key="close"
                 aria-label="Close"
                 color="inherit"
-                className={classes.close}
+                className={s.close}
                 onClick={handleClose}
               >
                 <Close />
@@ -235,7 +219,7 @@ const ReviewsComponent = (props: IProps) => {
                 key="close"
                 aria-label="Close"
                 color="inherit"
-                className={classes.close}
+                className={s.close}
                 onClick={handleClose}
               >
                 <Close />

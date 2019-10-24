@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { Close, Edit } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -16,43 +15,12 @@ import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
 
-import dateConverter from '../../../common/plugins/date-converter';
-import http from '../../../http.service';
-import { appLoading, initReload } from '../../../common/redux';
+import dateConverter from '../../common/plugins/date-converter';
+import http from '../../http.service';
+import { appLoading, initReload } from '../../common/redux';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      margin: theme.spacing(1),
-    },
-    close: {
-      background: '#111',
-      margin: '0.5rem',
-    },
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    headingBar: {
-      margin: theme.spacing(7, 0, 2, 0),
-    },
-    headingText: {
-      color: '#666',
-      fontSize: '1rem',
-    },
-    root: {
-      width: '100%',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-  }),
-);
+// Style
+import { newReviewStyle } from './new-review.style';
 
 interface IProps {
   url: string;
@@ -60,8 +28,8 @@ interface IProps {
   appLoading: any;
 }
 
-const HeadingBarNewReview = (props: IProps) => {
-  const classes = useStyles();
+const NewReviewBar = (props: IProps) => {
+  const s = newReviewStyle();
   const { url } = props;
 
   const [reviewBodyState, setReviewBodyState] = useState('');
@@ -128,11 +96,11 @@ const HeadingBarNewReview = (props: IProps) => {
       rating: ratingState,
     };
     http
-      .post('/reviews', data)
+      .post('/reviews-table', data)
       .then(() => {
         setSubmitting(true);
         handleOpenSuccessAlert();
-        // Trick to init rerender list of reviews:
+        // Trick to init rerender list of reviews-table:
         props.initReload(Math.random());
         setReviewBodyState('');
         setAuthorState('');
@@ -154,8 +122,8 @@ const HeadingBarNewReview = (props: IProps) => {
   };
 
   return (
-    <section className={classes.headingBar}>
-      <div className={classes.root}>
+    <section className={s.headingBar}>
+      <div className={s.root}>
         <ExpansionPanel>
           <ExpansionPanelSummary
             expandIcon={
@@ -166,7 +134,7 @@ const HeadingBarNewReview = (props: IProps) => {
             aria-controls="new-review"
             id="new-review"
           >
-            <Typography className={classes.headingText} variant="h6">
+            <Typography className={s.headingText} variant="h6">
               Book&apos;s reviews
             </Typography>
           </ExpansionPanelSummary>
@@ -174,7 +142,7 @@ const HeadingBarNewReview = (props: IProps) => {
             <Formik initialValues={{ title: '' }} onSubmit={e => handleSubmit(e)}>
               {() => (
                 <form
-                  className={classes.container}
+                  className={s.container}
                   autoComplete="off"
                   noValidate
                   onSubmit={handleSubmit}
@@ -195,7 +163,7 @@ const HeadingBarNewReview = (props: IProps) => {
                     id="review-body"
                     label="Review"
                     multiline
-                    className={classes.textField}
+                    className={s.textField}
                     placeholder="Enter your review here."
                     fullWidth
                     margin="normal"
@@ -206,7 +174,7 @@ const HeadingBarNewReview = (props: IProps) => {
                   <TextField
                     id="review-author"
                     label="Review's author"
-                    className={classes.textField}
+                    className={s.textField}
                     placeholder="Your name."
                     fullWidth
                     margin="normal"
@@ -219,7 +187,7 @@ const HeadingBarNewReview = (props: IProps) => {
                     type="submit"
                     variant="outlined"
                     color="primary"
-                    className={classes.button}
+                    className={s.button}
                   >
                     Done
                   </Button>
@@ -249,7 +217,7 @@ const HeadingBarNewReview = (props: IProps) => {
               key="close"
               aria-label="Close"
               color="inherit"
-              className={classes.close}
+              className={s.close}
               onClick={handleCloseAlert}
             >
               <Close />
@@ -276,7 +244,7 @@ const HeadingBarNewReview = (props: IProps) => {
               key="close"
               aria-label="Close"
               color="inherit"
-              className={classes.close}
+              className={s.close}
               onClick={handleCloseAlert}
             >
               <Close />
@@ -298,6 +266,6 @@ const mapDispatchToProps = (dispatch: any) => {
 const Component = connect(
   undefined,
   mapDispatchToProps,
-)(HeadingBarNewReview);
+)(NewReviewBar);
 
 export default Component;

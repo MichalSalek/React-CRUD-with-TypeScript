@@ -17,7 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Header = (props: IStore) => {
+const NewBookBar = (props: IStore) => {
   const classes = useStyles();
   const { appLoading } = props;
 
@@ -51,6 +51,6 @@ const mapStateToProps = (store: IStore) => ({
 const Component = connect(
   mapStateToProps,
   undefined,
-)(Header);
+)(NewBookBar);
 
 export default Component;

@@ -4,40 +4,21 @@ import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles, createStyles, Theme } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import { Close } from '@material-ui/icons';
 
-import { setEditorOpen, setCurrentTitle, IStore, appLoading } from '../../common/redux';
+import { appLoading, IStore, setCurrentTitle, setEditorOpen } from '../../common/redux';
 import dateConverter from '../../common/plugins/date-converter';
 import http from '../../http.service';
 import compareChecksum from '../../common/plugins/checksum-comparision';
-import ReviewsComponent from './reviews/reviews';
-import HeadingBarNewReview from './reviews/heading-bar-new-review';
+import ReviewsComponent from '../reviews-table/reviews-table';
+import HeadingBarNewReview from '../new-review/new-review-bar';
 import validateISBN from '../../common/plugins/validate-isbn';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    button: {
-      margin: theme.spacing(1),
-    },
-    close: {
-      background: '#111',
-      margin: '0.5rem',
-    },
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-  }),
-);
+// Style
+import { bookEditorStyle } from './book-editor.style';
 
 interface IProps extends IStore {
   appLoading: any;
@@ -47,7 +28,7 @@ interface IProps extends IStore {
 }
 
 const BookEditor = (props: IProps) => {
-  const classes = useStyles();
+  const s = bookEditorStyle();
   const { match } = props;
   const { url } = match;
 
@@ -64,13 +45,6 @@ const BookEditor = (props: IProps) => {
 
   const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
   const [openErrorAlert, setOpenErrorAlert] = useState(false);
-
-  const handleOpenSuccessAlert = () => {
-    setOpenSuccessAlert(true);
-  };
-  const handleOpenErrorAlert = () => {
-    setOpenErrorAlert(true);
-  };
 
   const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -176,13 +150,13 @@ const BookEditor = (props: IProps) => {
       .put(path, data)
       .then(() => {
         setSubmitting(true);
-        handleOpenSuccessAlert();
+        setOpenSuccessAlert(true);
         props.appLoading(false);
       })
       .catch(error => {
         console.error(error);
         setSubmitting(false);
-        handleOpenErrorAlert();
+        setOpenErrorAlert(true);
       });
   };
 
@@ -210,16 +184,11 @@ const BookEditor = (props: IProps) => {
           onSubmit={e => handleSubmit(e)}
         >
           {() => (
-            <form
-              className={classes.container}
-              autoComplete="off"
-              noValidate
-              onSubmit={handleSubmit}
-            >
+            <form className={s.container} autoComplete="off" noValidate onSubmit={handleSubmit}>
               <TextField
                 id="book-title"
                 label="Book"
-                className={classes.textField}
+                className={s.textField}
                 placeholder="Enter title of the book."
                 fullWidth
                 margin="normal"
@@ -234,7 +203,7 @@ const BookEditor = (props: IProps) => {
                 }
                 id="book-isbn"
                 label={ISBNInvalid ? 'Error' : 'ISBN'}
-                className={classes.textField}
+                className={s.textField}
                 placeholder="Enter isbn number."
                 fullWidth
                 margin="normal"
@@ -245,7 +214,7 @@ const BookEditor = (props: IProps) => {
               <TextField
                 id="book-description"
                 label="Description"
-                className={classes.textField}
+                className={s.textField}
                 placeholder="Enter description of the book."
                 fullWidth
                 multiline
@@ -257,7 +226,7 @@ const BookEditor = (props: IProps) => {
               <TextField
                 id="book-author"
                 label="Author"
-                className={classes.textField}
+                className={s.textField}
                 placeholder="Author of the book."
                 fullWidth
                 margin="normal"
@@ -275,7 +244,7 @@ const BookEditor = (props: IProps) => {
                 variant="outlined"
                 onChange={handleChange}
                 value={publicationDateState}
-                className={classes.textField}
+                className={s.textField}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -285,7 +254,7 @@ const BookEditor = (props: IProps) => {
                 type="submit"
                 variant="outlined"
                 color="primary"
-                className={classes.button}
+                className={s.button}
               >
                 Update
               </Button>
@@ -316,7 +285,7 @@ const BookEditor = (props: IProps) => {
               key="close"
               aria-label="Close"
               color="inherit"
-              className={classes.close}
+              className={s.close}
               onClick={handleCloseAlert}
             >
               <Close />
@@ -343,7 +312,7 @@ const BookEditor = (props: IProps) => {
               key="close"
               aria-label="Close"
               color="inherit"
-              className={classes.close}
+              className={s.close}
               onClick={handleCloseAlert}
             >
               <Close />

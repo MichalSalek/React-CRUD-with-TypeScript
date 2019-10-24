@@ -1,6 +1,5 @@
 // node_modules
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,30 +14,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import SingleBookRecord from './single-book-record';
+import SingleBookRecord from '../single-book-record/single-book-record';
 import http from '../../http.service';
 import { BookApiCollection, BookApiItem } from '../../domainModel';
 import { IDataPreparedForTable } from './books-list.model';
 import { IStore, setEditorOpen, appLoading } from '../../common/redux';
 
-const useStyles = makeStyles({
-  close: {
-    background: '#111',
-    margin: '0.5rem',
-  },
-  headerCell: {
-    fontSize: '0.8rem',
-    letterSpacing: '0.07rem',
-  },
-  tableHead: {
-    background: '#fafafa',
-    borderTop: '1px solid #ddd',
-    boxShadow: '0px 5px 8px -3px rgba(0,0,0,0.3)',
-    position: 'sticky',
-    top: '60px',
-    zIndex: 10,
-  },
-});
+// Style
+import { bookListStyle } from './book-list.style';
 
 interface IProps {
   initReload: any;
@@ -57,7 +40,7 @@ const BooksList = (props: IProps & IStore) => {
   const handleOpenError = () => {
     setOpenError(true);
   };
-  const classes = useStyles();
+  const s = bookListStyle();
   const [callResolve, setCallResolve] = useState(false);
   const [listOfBooks, setListOfBooks] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
@@ -147,8 +130,8 @@ const BooksList = (props: IProps & IStore) => {
     <section>
       {callResolve ? (
         <Table>
-          <TableHead className={classes.tableHead}>
-            <TableRow className={classes.headerCell}>
+          <TableHead className={s.tableHead}>
+            <TableRow className={s.headerCell}>
               <TableCell>ISBN: </TableCell>
               <TableCell>Title: </TableCell>
               <TableCell>Author:</TableCell>
@@ -199,7 +182,7 @@ const BooksList = (props: IProps & IStore) => {
               key="close"
               aria-label="Close"
               color="inherit"
-              className={classes.close}
+              className={s.close}
               onClick={handleClose}
             >
               <Close />
@@ -226,7 +209,7 @@ const BooksList = (props: IProps & IStore) => {
               key="close"
               aria-label="Close"
               color="inherit"
-              className={classes.close}
+              className={s.close}
               onClick={handleClose}
             >
               <Close />

@@ -11,7 +11,7 @@ import Badge from '@material-ui/core/Badge';
 import { withStyles, Theme } from '@material-ui/core/styles';
 
 import http from '../../http.service';
-import { IDataPreparedForTable } from './books-list.model';
+import { IDataPreparedForTable } from '../books-list/books-list.model';
 import { appLoading, initReload } from '../../common/redux';
 
 const StyledBadge = withStyles((theme: Theme) => ({

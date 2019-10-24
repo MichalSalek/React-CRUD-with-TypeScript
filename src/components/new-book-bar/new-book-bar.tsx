@@ -6,7 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Link } from 'react-router-dom';
 import { Close, Edit, ArrowBack } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
-import { createStyles, makeStyles, Theme } from '@material-ui/core';
+
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -20,54 +20,20 @@ import dateConverter from '../../common/plugins/date-converter';
 import validateISBN from '../../common/plugins/validate-isbn';
 import http from '../../http.service';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    appBodyHeadingBar: {
-      alignItems: 'center',
-      display: 'flex',
-      height: '55px',
-      justifyContent: 'space-between',
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-    close: {
-      background: '#111',
-      margin: '0.5rem',
-    },
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    headingBar: {
-      margin: theme.spacing(0, 0, 2, 0),
-    },
-    headingText: {
-      color: '#666',
-      fontSize: '1rem',
-    },
-    root: {
-      width: '100%',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-    },
-  }),
-);
+// Style
+import { newBookBarStyle } from './new-book-bar.style';
 
+// Props interface
 interface IProps extends IStore {
   initReload: any;
   appLoading: any;
 }
 
-const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
-  const classes = useStyles();
+const NewBookBar = (props: IStore | IProps) => {
+  const s = newBookBarStyle();
   const { editorIsOpen, currentTitle } = props;
+
+  // State
   const [editorMode, setEditorMode] = useState(false);
   useEffect(() => {
     // Warning fix:
@@ -76,7 +42,6 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
       setEditorMode(editorIsOpen);
     }, 50);
   }, [editorIsOpen]);
-
   const [titleState, setTitleState] = useState('');
   const [ISBNState, setISBNState] = useState('');
   const [ISBNInvalid, setISBNInvalid] = useState(false);
@@ -85,13 +50,6 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
   const [submitting, setSubmitting] = useState(false);
   const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
   const [openErrorAlert, setOpenErrorAlert] = useState(false);
-
-  const handleOpenSuccessAlert = () => {
-    setOpenSuccessAlert(true);
-  };
-  const handleOpenErrorAlert = () => {
-    setOpenErrorAlert(true);
-  };
 
   const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === 'clickaway') {
@@ -159,7 +117,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
       .post('/books', data)
       .then(() => {
         setSubmitting(true);
-        handleOpenSuccessAlert();
+        setOpenSuccessAlert(true);
         props.initReload(Math.random());
         setTitleState('');
         setISBNState('');
@@ -169,7 +127,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
       })
       .catch(() => {
         setSubmitting(false);
-        handleOpenErrorAlert();
+        setOpenErrorAlert(true);
       });
   };
   const handleSubmit = (e: any) => {
@@ -182,7 +140,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
   return (
     <React.Fragment>
       {editorMode ? (
-        <section className={classes.appBodyHeadingBar}>
+        <section className={s.appBodyHeadingBar}>
           <Typography variant="h5" color="inherit">
             {editorMode ? currentTitle : 'Books'}
           </Typography>
@@ -196,8 +154,8 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
           </Link>
         </section>
       ) : (
-        <section className={classes.headingBar}>
-          <div className={classes.root}>
+        <section className={s.headingBar}>
+          <div className={s.root}>
             <ExpansionPanel>
               <ExpansionPanelSummary
                 expandIcon={
@@ -226,7 +184,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                 >
                   {() => (
                     <form
-                      className={classes.container}
+                      className={s.container}
                       autoComplete="off"
                       noValidate
                       onSubmit={handleSubmit}
@@ -234,7 +192,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                       <TextField
                         id="book-title"
                         label="Book"
-                        className={classes.textField}
+                        className={s.textField}
                         placeholder="Enter title of the book."
                         fullWidth
                         margin="normal"
@@ -251,7 +209,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                         }
                         id="book-isbn"
                         label={ISBNInvalid ? 'Error' : 'ISBN'}
-                        className={classes.textField}
+                        className={s.textField}
                         placeholder="Enter isbn number."
                         fullWidth
                         margin="normal"
@@ -262,7 +220,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                       <TextField
                         id="book-description"
                         label="Description"
-                        className={classes.textField}
+                        className={s.textField}
                         placeholder="Enter description of the book."
                         fullWidth
                         multiline
@@ -274,7 +232,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                       <TextField
                         id="book-author"
                         label="Author"
-                        className={classes.textField}
+                        className={s.textField}
                         placeholder="Author of the book."
                         fullWidth
                         margin="normal"
@@ -287,7 +245,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                         type="submit"
                         variant="outlined"
                         color="primary"
-                        className={classes.button}
+                        className={s.button}
                       >
                         Add the book
                       </Button>
@@ -317,7 +275,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                   key="close"
                   aria-label="Close"
                   color="inherit"
-                  className={classes.close}
+                  className={s.close}
                   onClick={handleCloseAlert}
                 >
                   <Close />
@@ -344,7 +302,7 @@ const AppBodyHeadingBarNewBook = (props: IStore | IProps) => {
                   key="close"
                   aria-label="Close"
                   color="inherit"
-                  className={classes.close}
+                  className={s.close}
                   onClick={handleCloseAlert}
                 >
                   <Close />
@@ -373,6 +331,6 @@ const mapDispatchToProps = (dispatch: any) => {
 const Component = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AppBodyHeadingBarNewBook);
+)(NewBookBar);
 
 export default Component;
