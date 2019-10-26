@@ -5,10 +5,6 @@ export const newReviewStyle = makeStyles((theme: Theme) =>
     button: {
       margin: theme.spacing(1),
     },
-    close: {
-      background: '#111',
-      margin: '0.5rem',
-    },
     container: {
       display: 'flex',
       flexWrap: 'wrap',

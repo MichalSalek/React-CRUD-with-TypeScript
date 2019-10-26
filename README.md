@@ -1,5 +1,5 @@
 
-# Wykonanie zadania - Michał Sałek
+# React CRUD app
 [https://www.linkedin.com/in/michal-salek/](https://www.linkedin.com/in/michal-salek/)
 ### Możliwości ogólne:
 Usuwanie rekordów odbywa się na jednym źródle prawdy, dzięki temu użytkownik tracący dostęp do internetu nie skasuje rekordu tylko z widoku (a po odświeżeniu rekord wróci).
@@ -35,7 +35,6 @@ Aplikacja w całości jest dostępna z poziomu klawiatury.
 - Można wybrać ilość wyświetlanych wierszy (5, 10, 20)
 
 
-Aplikacji przydałby się refactoring codu, RWD również. Póki co - troszkę zostało zrobione i liczę na ruch z feedbackiem :-).
 
 Michał Sałek 
 

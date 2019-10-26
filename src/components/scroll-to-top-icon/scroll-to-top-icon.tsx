@@ -21,8 +21,13 @@ const ScrollToTopIcon = () => {
     window.scrollTo(0, 0);
   };
   return (
-    <Fab variant="extended" aria-label="Scroll to top" className={classes.fab}>
-      <NavigationIcon color="primary" onClick={scrollToTop} />
+    <Fab
+      variant="extended"
+      aria-label="Scroll to top"
+      className={classes.fab}
+      onClick={scrollToTop}
+    >
+      <NavigationIcon color="primary" />
     </Fab>
   );
 };

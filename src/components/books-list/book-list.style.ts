@@ -1,10 +1,6 @@
 import {  makeStyles } from '@material-ui/core';
 
 export const bookListStyle = makeStyles({
-  close: {
-    background: '#111',
-    margin: '0.5rem',
-  },
   headerCell: {
     fontSize: '0.8rem',
     letterSpacing: '0.07rem',

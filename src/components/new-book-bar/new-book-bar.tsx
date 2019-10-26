@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import { Link } from 'react-router-dom';
-import { Close, Edit, ArrowBack } from '@material-ui/icons';
+import { Edit, ArrowBack } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -13,25 +13,27 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Formik } from 'formik';
-import Snackbar from '@material-ui/core/Snackbar';
 
 import { appLoading, initReload, IStore } from '../../common/redux';
 import dateConverter from '../../common/plugins/date-converter';
-import validateISBN from '../../common/plugins/validate-isbn';
+
+// Services
 import http from '../../http.service';
 
 // Style
 import { newBookBarStyle } from './new-book-bar.style';
+import { SnackBarInfo } from '../snack-bar-info';
+import { CustomizableForm } from '../customizable-form/customizable-form';
 
 // Props interface
 interface IProps extends IStore {
   initReload: any;
-  appLoading: any;
+  setAppLoading: any;
 }
 
-const NewBookBar = (props: IStore | IProps) => {
+const NewBookBar = (props: IProps) => {
   const s = newBookBarStyle();
-  const { editorIsOpen, currentTitle } = props;
+  const { editorIsOpen, currentTitle, setAppLoading } = props;
 
   // State
   const [editorMode, setEditorMode] = useState(false);
@@ -51,34 +53,7 @@ const NewBookBar = (props: IStore | IProps) => {
   const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
   const [openErrorAlert, setOpenErrorAlert] = useState(false);
 
-  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSuccessAlert(false);
-    setOpenErrorAlert(false);
-  };
-  const handleChange = (e: any) => {
-    switch (e.currentTarget.id) {
-      case 'book-title':
-        setTitleState(e.currentTarget.value);
-        break;
-      case 'book-isbn':
-        setISBNInvalid(!validateISBN(e.currentTarget.value));
-        setISBNState(e.currentTarget.value);
-        break;
-      case 'book-description':
-        setDescriptionState(e.currentTarget.value);
-        break;
-      case 'book-author':
-        setAuthorState(e.currentTarget.value);
-        break;
-      default:
-        break;
-    }
-    return null;
-  };
-
+  // Validation are fields empty or not
   useEffect(() => {
     const formValidation = () => {
       switch (true) {
@@ -112,7 +87,6 @@ const NewBookBar = (props: IStore | IProps) => {
       publicationDate: dateConverter('', 'today'),
       title: titleState,
     };
-
     http
       .post('/books', data)
       .then(() => {
@@ -123,18 +97,13 @@ const NewBookBar = (props: IStore | IProps) => {
         setISBNState('');
         setDescriptionState('');
         setAuthorState('');
-        props.appLoading(false);
+        setAppLoading(false);
       })
       .catch(() => {
         setSubmitting(false);
         setOpenErrorAlert(true);
+        setAppLoading(false);
       });
-  };
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    props.appLoading(true);
-    setSubmitting(true);
-    sendNewBook();
   };
 
   return (
@@ -169,146 +138,39 @@ const NewBookBar = (props: IStore | IProps) => {
                 <Typography variant="h5">Books</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <Formik
-                  initialValues={{ title: titleState }}
-                  validate={values => {
-                    const errors = {
-                      title: '',
-                    };
-                    if (!values.title) {
-                      errors.title = 'Required';
-                    }
-                    return errors;
-                  }}
-                  onSubmit={e => handleSubmit(e)}
-                >
-                  {() => (
-                    <form
-                      className={s.container}
-                      autoComplete="off"
-                      noValidate
-                      onSubmit={handleSubmit}
-                    >
-                      <TextField
-                        id="book-title"
-                        label="Book"
-                        className={s.textField}
-                        placeholder="Enter title of the book."
-                        fullWidth
-                        margin="normal"
-                        variant="outlined"
-                        onChange={handleChange}
-                        value={titleState}
-                      />
-                      <TextField
-                        error={ISBNInvalid}
-                        helperText={
-                          ISBNInvalid
-                            ? 'This value is neither a valid ISBN-10 nor a valid ISBN-13.'
-                            : ''
-                        }
-                        id="book-isbn"
-                        label={ISBNInvalid ? 'Error' : 'ISBN'}
-                        className={s.textField}
-                        placeholder="Enter isbn number."
-                        fullWidth
-                        margin="normal"
-                        variant="outlined"
-                        onChange={handleChange}
-                        value={ISBNState}
-                      />
-                      <TextField
-                        id="book-description"
-                        label="Description"
-                        className={s.textField}
-                        placeholder="Enter description of the book."
-                        fullWidth
-                        multiline
-                        margin="normal"
-                        variant="outlined"
-                        onChange={handleChange}
-                        value={descriptionState}
-                      />
-                      <TextField
-                        id="book-author"
-                        label="Author"
-                        className={s.textField}
-                        placeholder="Author of the book."
-                        fullWidth
-                        margin="normal"
-                        variant="outlined"
-                        onChange={handleChange}
-                        value={authorState}
-                      />
-                      <Button
-                        disabled={submitting}
-                        type="submit"
-                        variant="outlined"
-                        color="primary"
-                        className={s.button}
-                      >
-                        Add the book
-                      </Button>
-                    </form>
-                  )}
-                </Formik>
+                <CustomizableForm
+                  titleState={titleState}
+                  ISBNInvalid={ISBNInvalid}
+                  ISBNState={ISBNState}
+                  descriptionState={descriptionState}
+                  authorState={authorState}
+                  submitButtonText="Update"
+                  appLoading={setAppLoading}
+                  setTitleState={setTitleState}
+                  setISBNInvalid={setISBNInvalid}
+                  setISBNState={setISBNState}
+                  setDescriptionState={setDescriptionState}
+                  setAuthorState={setAuthorState}
+                  setSubmitting={setSubmitting}
+                  submitting={submitting}
+                  doHTTPOperation={sendNewBook}
+                />
               </ExpansionPanelDetails>
             </ExpansionPanel>
           </div>
-
-          <Snackbar
-            key="SnackbaropenSuccess"
-            anchorOrigin={{
-              horizontal: 'left',
-              vertical: 'bottom',
-            }}
-            ContentProps={{
-              'aria-describedby': 'message-id',
-            }}
+          <SnackBarInfo
+            keyItem="SnackbaropenSuccess"
             open={openSuccessAlert}
-            autoHideDuration={2200}
-            onClose={handleCloseAlert}
-            message={<span id="message-id">Book has been added!</span>}
-            action={[
-              <Tooltip key="close1" title="Close">
-                <IconButton
-                  key="close"
-                  aria-label="Close"
-                  color="inherit"
-                  className={s.close}
-                  onClick={handleCloseAlert}
-                >
-                  <Close />
-                </IconButton>
-              </Tooltip>,
-            ]}
+            displayMessage="Book has been added!"
+            OpenSuccessAlertSetter={setOpenSuccessAlert}
+            OpenErrorAlertSetter={setOpenErrorAlert}
           />
-          <Snackbar
-            key="SnackbaropenError"
-            anchorOrigin={{
-              horizontal: 'left',
-              vertical: 'bottom',
-            }}
-            ContentProps={{
-              'aria-describedby': 'message-id',
-            }}
+          <SnackBarInfo
+            keyItem="SnackbaropenError"
             open={openErrorAlert}
-            autoHideDuration={2200}
-            onClose={handleCloseAlert}
-            message={<span id="message-id">Something went wrong...</span>}
-            action={[
-              <Tooltip key="close2" title="Close">
-                <IconButton
-                  key="close"
-                  aria-label="Close"
-                  color="inherit"
-                  className={s.close}
-                  onClick={handleCloseAlert}
-                >
-                  <Close />
-                </IconButton>
-              </Tooltip>,
-            ]}
+            displayMessage="Something went wrong..."
+            OpenSuccessAlertSetter={setOpenSuccessAlert}
+            OpenErrorAlertSetter={setOpenErrorAlert}
           />
         </section>
       )}
@@ -323,8 +185,8 @@ const mapStateToProps = (store: IStore) => ({
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    appLoading: (boo: boolean) => dispatch(appLoading(boo)),
     initReload: (number: number) => dispatch(initReload(number)),
+    setAppLoading: (boo: boolean) => dispatch(appLoading(boo)),
   };
 };
 

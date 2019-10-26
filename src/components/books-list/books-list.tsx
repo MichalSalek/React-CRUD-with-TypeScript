@@ -7,10 +7,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import { Close } from '@material-ui/icons';
-import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -22,6 +18,7 @@ import { IStore, setEditorOpen, appLoading } from '../../common/redux';
 
 // Style
 import { bookListStyle } from './book-list.style';
+import { SnackBarInfo } from '../snack-bar-info';
 
 interface IProps {
   initReload: any;
@@ -92,10 +89,10 @@ const BooksList = (props: IProps & IStore) => {
     const arrangeDataForRender = (data: BookApiItem[]) => {
       const helperArrangedData: IDataPreparedForTable[] = [];
       data.forEach((val: BookApiCollection) => {
-        let forBadgesLegnth = 0;
+        let forBadgesLength = 0;
         if (val.relationships) {
           const forBadges = val.relationships.reviews.data;
-          forBadgesLegnth = forBadges.length;
+          forBadgesLength = forBadges.length;
         }
         helperArrangedData.push(
           createRow(
@@ -103,7 +100,7 @@ const BooksList = (props: IProps & IStore) => {
             val.attributes.isbn,
             val.attributes.title,
             val.attributes.author,
-            forBadgesLegnth,
+            forBadgesLength,
           ),
         );
         return null;
@@ -113,14 +110,6 @@ const BooksList = (props: IProps & IStore) => {
 
     arrangeDataForRender(listOfBooks);
   }, [listOfBooks]);
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSuccess(false);
-    setOpenError(false);
-  };
 
   useEffect(() => {
     props.setEditorOpen(false);
@@ -163,59 +152,19 @@ const BooksList = (props: IProps & IStore) => {
           <CircularProgress /> <span> Loading the books... </span>
         </>
       )}
-      <Snackbar
-        key="SnackbaropenSuccess"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
+      <SnackBarInfo
+        keyItem="SnackbaropenSuccess"
         open={openSuccess}
-        autoHideDuration={2200}
-        onClose={handleClose}
-        message={<span id="message-id">Book deleted!</span>}
-        action={[
-          <Tooltip key="close1" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={s.close}
-              onClick={handleClose}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
+        displayMessage="Book deleted!"
+        OpenSuccessAlertSetter={setOpenSuccess}
+        OpenErrorAlertSetter={setOpenError}
       />
-      <Snackbar
-        key="SnackbaropenError"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
+      <SnackBarInfo
+        keyItem="SnackbaropenError"
         open={openError}
-        autoHideDuration={2200}
-        onClose={handleClose}
-        message={<span id="message-id">OH NO! We could not delete the book.</span>}
-        action={[
-          <Tooltip key="close2" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={s.close}
-              onClick={handleClose}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
+        displayMessage="OH NO! We could not delete the book."
+        OpenSuccessAlertSetter={setOpenSuccess}
+        OpenErrorAlertSetter={setOpenError}
       />
     </section>
   );

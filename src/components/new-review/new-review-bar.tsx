@@ -1,8 +1,7 @@
 // node_modules
 import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import { Close, Edit } from '@material-ui/icons';
+import { Edit } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -10,7 +9,6 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Formik } from 'formik';
-import Snackbar from '@material-ui/core/Snackbar';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import { connect } from 'react-redux';
@@ -21,6 +19,7 @@ import { appLoading, initReload } from '../../common/redux';
 
 // Style
 import { newReviewStyle } from './new-review.style';
+import { SnackBarInfo } from '../snack-bar-info';
 
 interface IProps {
   url: string;
@@ -46,14 +45,6 @@ const NewReviewBar = (props: IProps) => {
   };
   const handleOpenErrorAlert = () => {
     setOpenErrorAlert(true);
-  };
-
-  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSuccessAlert(false);
-    setOpenErrorAlert(false);
   };
 
   const handleChange = (e: any) => {
@@ -111,6 +102,7 @@ const NewReviewBar = (props: IProps) => {
         console.error(error);
         setSubmitting(false);
         handleOpenErrorAlert();
+        props.appLoading(false);
       });
   };
 
@@ -141,12 +133,7 @@ const NewReviewBar = (props: IProps) => {
           <ExpansionPanelDetails>
             <Formik initialValues={{ title: '' }} onSubmit={e => handleSubmit(e)}>
               {() => (
-                <form
-                  className={s.container}
-                  autoComplete="off"
-                  noValidate
-                  onSubmit={handleSubmit}
-                >
+                <form className={s.container} autoComplete="off" noValidate onSubmit={handleSubmit}>
                   <div>
                     <Box component="fieldset" mb={1} mt={1} p={1} borderColor="transparent">
                       <Typography component="legend">Rate this book:</Typography>
@@ -197,60 +184,19 @@ const NewReviewBar = (props: IProps) => {
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </div>
-
-      <Snackbar
-        key="SnackbaropenSuccess"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
+      <SnackBarInfo
+        keyItem="SnackbaropenSuccess"
         open={openSuccessAlert}
-        autoHideDuration={2200}
-        onClose={handleCloseAlert}
-        message={<span id="message-id">Your review has been added!</span>}
-        action={[
-          <Tooltip key="close1" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={s.close}
-              onClick={handleCloseAlert}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
+        displayMessage="Your review has been added!"
+        OpenSuccessAlertSetter={setOpenSuccessAlert}
+        OpenErrorAlertSetter={setOpenErrorAlert}
       />
-      <Snackbar
-        key="SnackbaropenError"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
+      <SnackBarInfo
+        keyItem="SnackbaropenError"
         open={openErrorAlert}
-        autoHideDuration={2200}
-        onClose={handleCloseAlert}
-        message={<span id="message-id">Something went wrong...</span>}
-        action={[
-          <Tooltip key="close2" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={s.close}
-              onClick={handleCloseAlert}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
+        displayMessage="Something went wrong..."
+        OpenSuccessAlertSetter={setOpenSuccessAlert}
+        OpenErrorAlertSetter={setOpenErrorAlert}
       />
     </section>
   );

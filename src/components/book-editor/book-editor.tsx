@@ -1,14 +1,7 @@
 // node_modules
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import { Close } from '@material-ui/icons';
 
 import { appLoading, IStore, setCurrentTitle, setEditorOpen } from '../../common/redux';
 import dateConverter from '../../common/plugins/date-converter';
@@ -16,20 +9,20 @@ import http from '../../http.service';
 import compareChecksum from '../../common/plugins/checksum-comparision';
 import ReviewsComponent from '../reviews-table/reviews-table';
 import HeadingBarNewReview from '../new-review/new-review-bar';
-import validateISBN from '../../common/plugins/validate-isbn';
-// Style
-import { bookEditorStyle } from './book-editor.style';
+import { SnackBarInfo } from '../snack-bar-info';
+
+// Form
+import { CustomizableForm } from '../customizable-form/customizable-form';
 
 interface IProps extends IStore {
-  appLoading: any;
+  setAppLoading: any;
   setCurrentTitle: any;
   setEditorOpen: any;
   match: { url: string };
 }
 
 const BookEditor = (props: IProps) => {
-  const s = bookEditorStyle();
-  const { match } = props;
+  const { match, setAppLoading } = props;
   const { url } = match;
 
   const [callResolve, setCallResolve] = useState(false);
@@ -45,14 +38,6 @@ const BookEditor = (props: IProps) => {
 
   const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
   const [openErrorAlert, setOpenErrorAlert] = useState(false);
-
-  const handleCloseAlert = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSuccessAlert(false);
-    setOpenErrorAlert(false);
-  };
 
   useEffect(() => {
     props.setEditorOpen(true);
@@ -87,7 +72,7 @@ const BookEditor = (props: IProps) => {
         setPublicationDateState(dateConverter(rawData.publicationDate, 'cut-time'));
 
         setCallResolve(true);
-        props.appLoading(false);
+        setAppLoading(false);
         return null;
       })
       .catch(error => console.error(error));
@@ -97,30 +82,6 @@ const BookEditor = (props: IProps) => {
   useEffect(() => {
     callForSingleBook(url);
   }, [url]);
-
-  const handleChange = (e: any) => {
-    switch (e.currentTarget.id) {
-      case 'book-title':
-        setTitleState(e.currentTarget.value);
-        break;
-      case 'book-isbn':
-        setISBNInvalid(!validateISBN(e.currentTarget.value));
-        setISBNState(e.currentTarget.value);
-        break;
-      case 'book-description':
-        setDescriptionState(e.currentTarget.value);
-        break;
-      case 'book-author':
-        setAuthorState(e.currentTarget.value);
-        break;
-      case 'book-publication-date':
-        setPublicationDateState(e.currentTarget.value);
-        break;
-      default:
-        break;
-    }
-    return null;
-  };
 
   const setAllValuesStringToComparision = () =>
     titleState + ISBNState + descriptionState + authorState + publicationDateState;
@@ -137,7 +98,7 @@ const BookEditor = (props: IProps) => {
     }
   }, [checksumString, newValuesString, ISBNInvalid]);
 
-  const putNewDataToThisBook = (path: string) => {
+  const putNewDataToThisBook = () => {
     const data = {
       author: authorState,
       description: descriptionState,
@@ -147,178 +108,60 @@ const BookEditor = (props: IProps) => {
     };
     setChecksumString(setAllValuesStringToComparision());
     http
-      .put(path, data)
+      .put(url, data)
       .then(() => {
         setSubmitting(true);
         setOpenSuccessAlert(true);
-        props.appLoading(false);
+        setAppLoading(false);
       })
       .catch(error => {
         console.error(error);
         setSubmitting(false);
         setOpenErrorAlert(true);
+        setAppLoading(false);
       });
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    props.appLoading(true);
-    setSubmitting(true);
-    putNewDataToThisBook(url);
   };
 
   return (
     <React.Fragment>
       {callResolve ? (
-        <Formik
-          initialValues={{ title: titleState }}
-          validate={values => {
-            const errors = {
-              title: '',
-            };
-            if (!values.title) {
-              errors.title = 'Required';
-            }
-            return errors;
-          }}
-          onSubmit={e => handleSubmit(e)}
-        >
-          {() => (
-            <form className={s.container} autoComplete="off" noValidate onSubmit={handleSubmit}>
-              <TextField
-                id="book-title"
-                label="Book"
-                className={s.textField}
-                placeholder="Enter title of the book."
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                onChange={handleChange}
-                value={titleState}
-              />
-              <TextField
-                error={ISBNInvalid}
-                helperText={
-                  ISBNInvalid ? 'This value is neither a valid ISBN-10 nor a valid ISBN-13.' : ''
-                }
-                id="book-isbn"
-                label={ISBNInvalid ? 'Error' : 'ISBN'}
-                className={s.textField}
-                placeholder="Enter isbn number."
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                onChange={handleChange}
-                value={ISBNState}
-              />
-              <TextField
-                id="book-description"
-                label="Description"
-                className={s.textField}
-                placeholder="Enter description of the book."
-                fullWidth
-                multiline
-                margin="normal"
-                variant="outlined"
-                onChange={handleChange}
-                value={descriptionState}
-              />
-              <TextField
-                id="book-author"
-                label="Author"
-                className={s.textField}
-                placeholder="Author of the book."
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                onChange={handleChange}
-                value={authorState}
-              />
-              <TextField
-                id="book-publication-date"
-                label="Publication date"
-                type="date"
-                placeholder="Enter a publication date."
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                onChange={handleChange}
-                value={publicationDateState}
-                className={s.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <Button
-                disabled={submitting}
-                type="submit"
-                variant="outlined"
-                color="primary"
-                className={s.button}
-              >
-                Update
-              </Button>
-            </form>
-          )}
-        </Formik>
+        <CustomizableForm
+          titleState={titleState}
+          ISBNInvalid={ISBNInvalid}
+          ISBNState={ISBNState}
+          descriptionState={descriptionState}
+          authorState={authorState}
+          publicationDateState={publicationDateState}
+          submitButtonText="Update"
+          appLoading={setAppLoading}
+          setTitleState={setTitleState}
+          setISBNInvalid={setISBNInvalid}
+          setISBNState={setISBNState}
+          setDescriptionState={setDescriptionState}
+          setAuthorState={setAuthorState}
+          setPublicationDateState={setPublicationDateState}
+          setSubmitting={setSubmitting}
+          submitting={submitting}
+          doHTTPOperation={putNewDataToThisBook}
+        />
       ) : (
         <>
           <CircularProgress /> <span> Loading your book info... </span>
         </>
       )}
-      <Snackbar
-        key="SnackbaropenSuccess"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
+      <SnackBarInfo
+        keyItem="SnackbaropenSuccess"
         open={openSuccessAlert}
-        autoHideDuration={2200}
-        onClose={handleCloseAlert}
-        message={<span id="message-id">Book information has been updated!</span>}
-        action={[
-          <Tooltip key="close1" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={s.close}
-              onClick={handleCloseAlert}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
+        displayMessage="Book information has been updated!"
+        OpenSuccessAlertSetter={setOpenSuccessAlert}
+        OpenErrorAlertSetter={setOpenErrorAlert}
       />
-      <Snackbar
-        key="SnackbaropenError"
-        anchorOrigin={{
-          horizontal: 'left',
-          vertical: 'bottom',
-        }}
-        ContentProps={{
-          'aria-describedby': 'message-id',
-        }}
+      <SnackBarInfo
+        keyItem="SnackbaropenError"
         open={openErrorAlert}
-        autoHideDuration={2200}
-        onClose={handleCloseAlert}
-        message={<span id="message-id">Something went wrong with the update.</span>}
-        action={[
-          <Tooltip key="close2" title="Close">
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={s.close}
-              onClick={handleCloseAlert}
-            >
-              <Close />
-            </IconButton>
-          </Tooltip>,
-        ]}
+        displayMessage="Something went wrong with the update."
+        OpenSuccessAlertSetter={setOpenSuccessAlert}
+        OpenErrorAlertSetter={setOpenErrorAlert}
       />
       <HeadingBarNewReview url={url} />
       <ReviewsComponent bookID={url} />
@@ -332,7 +175,7 @@ const mapStateToProps = (store: IStore) => ({
 
 const mapDispatchToProps = (dispatch: any) => {
   return {
-    appLoading: (boo: boolean) => dispatch(appLoading(boo)),
+    setAppLoading: (boo: boolean) => dispatch(appLoading(boo)),
     setCurrentTitle: (string: string) => dispatch(setCurrentTitle(string)),
     setEditorOpen: (boo: boolean) => dispatch(setEditorOpen(boo)),
   };

@@ -1,13 +1,9 @@
 import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
-export const bookEditorStyle = makeStyles((theme: Theme) =>
+export const CustomizableFormStyle = makeStyles((theme: Theme) =>
   createStyles({
     button: {
       margin: theme.spacing(1),
-    },
-    close: {
-      background: '#111',
-      margin: '0.5rem',
     },
     container: {
       display: 'flex',
