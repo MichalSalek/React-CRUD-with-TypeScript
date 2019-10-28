@@ -40,13 +40,6 @@ const NewReviewBar = (props: IProps) => {
   const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
   const [openErrorAlert, setOpenErrorAlert] = useState(false);
 
-  const handleOpenSuccessAlert = () => {
-    setOpenSuccessAlert(true);
-  };
-  const handleOpenErrorAlert = () => {
-    setOpenErrorAlert(true);
-  };
-
   const handleChange = (e: any) => {
     switch (e.currentTarget.id) {
       case 'review-body':
@@ -90,7 +83,7 @@ const NewReviewBar = (props: IProps) => {
       .post('/reviews-table', data)
       .then(() => {
         setSubmitting(true);
-        handleOpenSuccessAlert();
+        setOpenSuccessAlert(true);
         // Trick to init rerender list of reviews-table:
         props.initReload(Math.random());
         setReviewBodyState('');
@@ -101,7 +94,7 @@ const NewReviewBar = (props: IProps) => {
       .catch(error => {
         console.error(error);
         setSubmitting(false);
-        handleOpenErrorAlert();
+        setOpenErrorAlert(true);
         props.appLoading(false);
       });
   };

@@ -10,9 +10,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { Formik } from 'formik';
 
 import { appLoading, initReload, IStore } from '../../common/redux';
 import dateConverter from '../../common/plugins/date-converter';

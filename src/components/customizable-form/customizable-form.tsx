@@ -51,20 +51,20 @@ export const CustomizableForm = (props: IProps) => {
   const handleChange = (e: any) => {
     /* eslint-disable no-unused-expressions */
     switch (e.currentTarget.id) {
-      case 'book-title':
+      case 'title':
         setTitleState(e.currentTarget.value);
         break;
-      case 'book-isbn':
+      case 'isbn':
         setISBNInvalid(!validateISBN(e.currentTarget.value));
         setISBNState(e.currentTarget.value);
         break;
-      case 'book-description':
+      case 'description':
         setDescriptionState(e.currentTarget.value);
         break;
-      case 'book-author':
+      case 'author':
         setAuthorState(e.currentTarget.value);
         break;
-      case 'book-publication-date':
+      case 'publication-date':
         typeof setPublicationDateState !== 'undefined' &&
           setPublicationDateState(e.currentTarget.value);
         break;
@@ -99,7 +99,7 @@ export const CustomizableForm = (props: IProps) => {
       {() => (
         <form className={s.container} autoComplete="off" noValidate onSubmit={handleSubmit}>
           <TextField
-            id="book-title"
+            id="title"
             label="Book"
             className={s.textField}
             placeholder="Enter title of the book."
@@ -114,7 +114,7 @@ export const CustomizableForm = (props: IProps) => {
             helperText={
               ISBNInvalid ? 'This value is neither a valid ISBN-10 nor a valid ISBN-13.' : ''
             }
-            id="book-isbn"
+            id="isbn"
             label={ISBNInvalid ? 'Error' : 'ISBN'}
             className={s.textField}
             placeholder="Enter isbn number."
@@ -125,7 +125,7 @@ export const CustomizableForm = (props: IProps) => {
             value={ISBNState}
           />
           <TextField
-            id="book-description"
+            id="description"
             label="Description"
             className={s.textField}
             placeholder="Enter description of the book."
@@ -137,7 +137,7 @@ export const CustomizableForm = (props: IProps) => {
             value={descriptionState}
           />
           <TextField
-            id="book-author"
+            id="author"
             label="Author"
             className={s.textField}
             placeholder="Author of the book."
@@ -149,7 +149,7 @@ export const CustomizableForm = (props: IProps) => {
           />
           {publicationDateState && (
             <TextField
-              id="book-publication-date"
+              id="publication-date"
               label="Publication date"
               type="date"
               placeholder="Enter a publication date."
