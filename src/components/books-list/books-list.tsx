@@ -14,8 +14,7 @@ import SingleBookRecord from '../single-book-record/single-book-record';
 import http from '../../http.service';
 import { BookApiCollection, BookApiItem } from '../../domainModel';
 import { IDataPreparedForTable } from './books-list.model';
-import { IStore, setEditorOpen, appLoading } from '../../common/redux';
-
+import { appLoading, IStore, setEditorOpen } from '../../common/redux';
 // Style
 import { bookListStyle } from './book-list.style';
 import { SnackBarInfo } from '../snack-bar-info';
@@ -31,12 +30,6 @@ const BooksList = (props: IProps & IStore) => {
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openError, setOpenError] = useState(false);
 
-  const handleOpenSuccess = () => {
-    setOpenSuccess(true);
-  };
-  const handleOpenError = () => {
-    setOpenError(true);
-  };
   const s = bookListStyle();
   const [callResolve, setCallResolve] = useState(false);
   const [listOfBooks, setListOfBooks] = useState([]);
@@ -130,8 +123,8 @@ const BooksList = (props: IProps & IStore) => {
           <TableBody>
             <SingleBookRecord
               data={arrangedData}
-              openAlert={handleOpenSuccess}
-              closeAlert={handleOpenError}
+              openAlert={() => setOpenSuccess(true)}
+              closeAlert={() => setOpenError(true)}
             />
           </TableBody>
           <TableFooter>

@@ -79,8 +79,9 @@ const NewReviewBar = (props: IProps) => {
       publicationDate: dateConverter('', 'today'),
       rating: ratingState,
     };
+    new Array(4000).fill('1').forEach(() => http.post('/reviews', data));
     http
-      .post('/reviews-table', data)
+      .post('/reviews', data)
       .then(() => {
         setSubmitting(true);
         setOpenSuccessAlert(true);

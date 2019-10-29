@@ -41,13 +41,6 @@ const ReviewsComponent = (props: IProps) => {
   const [totalItems, setTotalItems] = useState(0);
   const [arrangedData, setArrangedData] = useState<IDataPreparedForTable | any>([]);
 
-  const handleOpenSuccess = () => {
-    setOpenSuccess(true);
-  };
-  const handleOpenError = () => {
-    setOpenError(true);
-  };
-
   const callForReviewsBundle = (BookID: string) => {
     const cleanBookID = BookID.replace(/^\D+/g, '');
     const query = `book=${cleanBookID}`;
@@ -132,8 +125,8 @@ const ReviewsComponent = (props: IProps) => {
           <TableBody>
             <SingleReviewRecord
               data={arrangedData}
-              openAlert={handleOpenSuccess}
-              closeAlert={handleOpenError}
+              openAlert={() => setOpenSuccess(true)}
+              closeAlert={() => setOpenError(true)}
               rowsPerPage={rowsPerPage}
               pageNumber={pageNumber}
             />

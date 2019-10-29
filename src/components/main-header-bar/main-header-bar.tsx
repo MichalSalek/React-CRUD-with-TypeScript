@@ -33,7 +33,7 @@ const NewBookBar = (props: IStore) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <IconButton key="Linkedin" aria-label="linkedin" color="secondary">
+            <IconButton key="Linkedin" aria-label="linkedin" style={{color: 'white'}} color="inherit">
               <Message />
             </IconButton>{' '}
           </a>
